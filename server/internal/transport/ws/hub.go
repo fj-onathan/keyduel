@@ -206,6 +206,14 @@ func (h *Hub) Add(conn *websocket.Conn, preferredID string, identity PlayerIdent
 // channel and periodically sends WebSocket pings. Exiting this function
 // means the connection is considered dead.
 func (h *Hub) writePump(clientID string, cc *clientConn) {
+	// Guard against nil conn (e.g., in tests that call Add with nil).
+	if cc.conn == nil {
+		// Drain the send channel so Remove's close(cc.send) doesn't block.
+		for range cc.send {
+		}
+		return
+	}
+
 	ticker := time.NewTicker(pingInterval)
 	defer func() {
 		ticker.Stop()
