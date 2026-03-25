@@ -1,0 +1,167 @@
+# Full-stack development environment with hot-reload
+# Usage: docker compose -f docker-compose.dev.yml up --build
+#        or: make dev-up
+#
+# This file is for LOCAL DEVELOPMENT only.
+# Production deploys use Fly.io (see infra/fly/).
+
+services:
+  # ─── Infrastructure ───────────────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: keyduel_dev_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-typing_game}
+      POSTGRES_USER: ${POSTGRES_USER:-typing_game}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-typing_game}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - keyduel_dev_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-typing_game} -d ${POSTGRES_DB:-typing_game}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: keyduel_dev_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - keyduel_dev_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    command: ["redis-server", "--appendonly", "yes"]
+
+  # ─── Go Backend Services (hot-reload via air) ─────────────────────
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.go-dev
+    container_name: keyduel_dev_api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8080}:8080"
+    volumes:
+      - ./server:/app
+      - ./infra/docker:/air-config:ro
+      - keyduel_dev_go_mod:/go/pkg/mod
+      - keyduel_dev_go_build_api:/root/.cache/go-build
+    environment:
+      APP_ENV: development
+      API_PORT: "8080"
+      DATABASE_URL: postgres://${POSTGRES_USER:-typing_game}:${POSTGRES_PASSWORD:-typing_game}@postgres:5432/${POSTGRES_DB:-typing_game}?sslmode=disable
+      REDIS_URL: redis://redis:6379
+      CORS_ORIGIN: http://localhost:${CLIENT_PORT:-5173}
+      FRONTEND_URL: http://localhost:${CLIENT_PORT:-5173}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      GITHUB_CALLBACK_URL: ${GITHUB_CALLBACK_URL:-http://localhost:8080/auth/github/callback}
+      SESSION_SECRET: ${SESSION_SECRET:-replace_me_with_random_32_bytes}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: air -c /air-config/.air.api.toml
+
+  race-engine:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.go-dev
+    container_name: keyduel_dev_race_engine
+    restart: unless-stopped
+    ports:
+      - "${RACE_ENGINE_PORT:-8081}:8081"
+    volumes:
+      - ./server:/app
+      - ./infra/docker:/air-config:ro
+      - keyduel_dev_go_mod:/go/pkg/mod
+      - keyduel_dev_go_build_race:/root/.cache/go-build
+    environment:
+      APP_ENV: development
+      RACE_ENGINE_PORT: "8081"
+      DATABASE_URL: postgres://${POSTGRES_USER:-typing_game}:${POSTGRES_PASSWORD:-typing_game}@postgres:5432/${POSTGRES_DB:-typing_game}?sslmode=disable
+      REDIS_URL: redis://redis:6379
+      CORS_ORIGIN: http://localhost:${CLIENT_PORT:-5173}
+      FRONTEND_URL: http://localhost:${CLIENT_PORT:-5173}
+      SESSION_SECRET: ${SESSION_SECRET:-replace_me_with_random_32_bytes}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: air -c /air-config/.air.race-engine.toml
+
+  bot-runner:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.go-dev
+    container_name: keyduel_dev_bot_runner
+    restart: unless-stopped
+    volumes:
+      - ./server:/app
+      - ./infra/docker:/air-config:ro
+      - keyduel_dev_go_mod:/go/pkg/mod
+      - keyduel_dev_go_build_bot:/root/.cache/go-build
+    environment:
+      APP_ENV: development
+      BOT_ENABLED: ${BOT_ENABLED:-true}
+      BOT_CONCURRENCY: ${BOT_CONCURRENCY:-5}
+      BOT_MIN_CONCURRENCY: ${BOT_MIN_CONCURRENCY:-3}
+      BOT_MAX_CONCURRENCY: ${BOT_MAX_CONCURRENCY:-9}
+      BOT_RACE_INTERVAL_SECONDS: ${BOT_RACE_INTERVAL_SECONDS:-600}
+      BOT_WS_URL: ws://race-engine:8081/ws
+      BOT_API_URL: http://race-engine:8081
+      DATABASE_URL: postgres://${POSTGRES_USER:-typing_game}:${POSTGRES_PASSWORD:-typing_game}@postgres:5432/${POSTGRES_DB:-typing_game}?sslmode=disable
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: air -c /air-config/.air.bot-runner.toml
+
+  # ─── Frontend (hot-reload via Vite HMR) ───────────────────────────
+
+  client:
+    image: node:22-alpine
+    container_name: keyduel_dev_client
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "${CLIENT_PORT:-5173}:5173"
+    volumes:
+      - ./client:/app
+      - keyduel_dev_node_modules:/app/node_modules
+    environment:
+      VITE_APP_NAME: ${VITE_APP_NAME:-KeyDuel}
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
+      VITE_WS_BASE_URL: ${VITE_WS_BASE_URL:-ws://localhost:8081/ws}
+      VITE_RACE_ENGINE_BASE_URL: ${VITE_RACE_ENGINE_BASE_URL:-http://localhost:8081}
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - api
+      - race-engine
+
+volumes:
+  keyduel_dev_pg_data:
+  keyduel_dev_redis_data:
+  keyduel_dev_go_mod:
+  keyduel_dev_go_build_api:
+  keyduel_dev_go_build_race:
+  keyduel_dev_go_build_bot:
+  keyduel_dev_node_modules:

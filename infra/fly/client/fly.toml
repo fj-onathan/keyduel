@@ -1,0 +1,26 @@
+app = "keyduel-client"
+primary_region = "ams"
+
+[build]
+
+  [build.args]
+    VITE_APP_NAME = "KeyDuel"
+    VITE_API_BASE_URL = "https://api.keyduel.com"
+    VITE_WS_BASE_URL = "wss://ws.keyduel.com/ws"
+    VITE_RACE_ENGINE_BASE_URL = "https://ws.keyduel.com"
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 500
+    soft_limit = 400
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

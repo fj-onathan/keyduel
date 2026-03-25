@@ -1,0 +1,20 @@
+# Air configuration for the API service (dev hot-reload)
+root = "."
+tmp_dir = "tmp/api"
+
+[build]
+  bin = "./tmp/api/api"
+  cmd = "go build -o ./tmp/api/api ./cmd/api"
+  delay = 500
+  exclude_dir = ["tmp", "vendor", "node_modules"]
+  exclude_regex = ["_test\\.go$"]
+  include_ext = ["go", "tpl", "tmpl", "html", "sql"]
+  kill_delay = "0s"
+  send_interrupt = true
+  stop_on_error = true
+
+[log]
+  time = false
+
+[misc]
+  clean_on_exit = true

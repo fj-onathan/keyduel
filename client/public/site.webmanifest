@@ -1,0 +1,16 @@
+{
+  "name": "KeyDuel",
+  "short_name": "KeyDuel",
+  "description": "Multiplayer code typing races",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0C0A09",
+  "theme_color": "#F97316",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}

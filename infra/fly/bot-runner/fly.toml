@@ -1,0 +1,20 @@
+app = "keyduel-bot"
+primary_region = "ams"
+
+[build]
+
+[env]
+  BOT_ENABLED = "true"
+  BOT_CONCURRENCY = "5"
+  BOT_MIN_CONCURRENCY = "3"
+  BOT_MAX_CONCURRENCY = "9"
+  BOT_RACE_INTERVAL_SECONDS = "600"
+  BOT_WS_URL = "wss://ws.keyduel.com/ws"
+  BOT_API_URL = "https://ws.keyduel.com"
+
+[processes]
+  worker = "/usr/local/bin/bot-runner"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

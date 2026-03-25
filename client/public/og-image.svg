@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1C1917" />
+      <stop offset="1" stop-color="#0C0A09" />
+    </linearGradient>
+    <linearGradient id="orbGrad" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFD8A8" />
+      <stop offset="0.42" stop-color="#FFAB5A" />
+      <stop offset="1" stop-color="#FF7A1A" />
+    </linearGradient>
+    <linearGradient id="accentLine" x1="200" y1="500" x2="1000" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF7A1A" stop-opacity="0" />
+      <stop offset="0.3" stop-color="#FF7A1A" />
+      <stop offset="0.7" stop-color="#FFAB5A" />
+      <stop offset="1" stop-color="#FF7A1A" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.04" stroke="#FFFFFF" stroke-width="0.5">
+    <line x1="200" y1="0" x2="200" y2="630" />
+    <line x1="400" y1="0" x2="400" y2="630" />
+    <line x1="600" y1="0" x2="600" y2="630" />
+    <line x1="800" y1="0" x2="800" y2="630" />
+    <line x1="1000" y1="0" x2="1000" y2="630" />
+    <line x1="0" y1="157" x2="1200" y2="157" />
+    <line x1="0" y1="315" x2="1200" y2="315" />
+    <line x1="0" y1="472" x2="1200" y2="472" />
+  </g>
+
+  <!-- Brand orb icon (scaled from favicon) -->
+  <g transform="translate(510, 140) scale(1.6)">
+    <rect x="6" y="6" width="52" height="52" rx="14" fill="url(#orbGrad)" />
+    <rect x="12" y="12" width="40" height="40" rx="11" stroke="#FFE6C7" stroke-opacity="0.72" fill="none" />
+    <path d="M27.2 24.4C24.7 24.4 22.7 26.4 22.7 28.9V35.1C22.7 37.6 24.7 39.6 27.2 39.6" stroke="#A5540E" stroke-width="3.2" stroke-linecap="round" />
+    <path d="M36.8 24.4C39.3 24.4 41.3 26.4 41.3 28.9V35.1C41.3 37.6 39.3 39.6 36.8 39.6" stroke="#A5540E" stroke-width="3.2" stroke-linecap="round" />
+  </g>
+
+  <!-- Title text -->
+  <text x="600" y="330" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="72" font-weight="700" fill="#FAFAF9" letter-spacing="-2">KeyDuel</text>
+
+  <!-- Tagline -->
+  <text x="600" y="385" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="28" font-weight="400" fill="#A8A29E">Multiplayer Code Typing Races</text>
+
+  <!-- Accent line -->
+  <rect x="200" y="430" width="800" height="2" rx="1" fill="url(#accentLine)" />
+
+  <!-- Code snippet preview -->
+  <g font-family="'Courier New', monospace" font-size="18" opacity="0.5">
+    <text x="340" y="490" fill="#FFAB5A">func</text>
+    <text x="395" y="490" fill="#FAFAF9">main() {</text>
+    <text x="370" y="518" fill="#A8A29E">fmt.</text>
+    <text x="413" y="518" fill="#FFD8A8">Println</text>
+    <text x="494" y="518" fill="#FAFAF9">(</text>
+    <text x="504" y="518" fill="#86EFAC">"race!"</text>
+    <text x="586" y="518" fill="#FAFAF9">)</text>
+    <text x="340" y="546" fill="#FAFAF9">}</text>
+  </g>
+
+  <!-- Domain -->
+  <text x="600" y="600" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" font-weight="500" fill="#78716C">keyduel.com</text>
+</svg>

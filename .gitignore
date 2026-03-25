@@ -1,0 +1,31 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# Node/client
+client/node_modules/
+client/dist/
+client/.vite/
+
+# Go/server
+server/bin/
+server/coverage.out
+server/.cache/
+
+# Build artifacts
+dist/
+build/
+tmp/
+
+# Docker data overrides
+infra/docker/.env

@@ -1,0 +1,20 @@
+# Air configuration for the Race Engine service (dev hot-reload)
+root = "."
+tmp_dir = "tmp/race-engine"
+
+[build]
+  bin = "./tmp/race-engine/race-engine"
+  cmd = "go build -o ./tmp/race-engine/race-engine ./cmd/race-engine"
+  delay = 500
+  exclude_dir = ["tmp", "vendor", "node_modules"]
+  exclude_regex = ["_test\\.go$"]
+  include_ext = ["go", "tpl", "tmpl", "html", "sql"]
+  kill_delay = "0s"
+  send_interrupt = true
+  stop_on_error = true
+
+[log]
+  time = false
+
+[misc]
+  clean_on_exit = true

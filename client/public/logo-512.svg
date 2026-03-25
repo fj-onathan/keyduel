@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <defs>
+    <!-- Outer orb radial gradient (matches CSS: circle at 35% 28%) -->
+    <radialGradient id="orbBg" cx="0.35" cy="0.28" r="0.65" fx="0.35" fy="0.28">
+      <stop offset="0" stop-color="#FFF0D6" stop-opacity="0.9"/>
+      <stop offset="0.38" stop-color="#FFAA5E" stop-opacity="0.92"/>
+      <stop offset="0.78" stop-color="#FF7922" stop-opacity="0.88"/>
+      <stop offset="1" stop-color="#FF7A1A"/>
+    </radialGradient>
+
+    <!-- Inner core highlight gradient (matches CSS: circle at 36% 30%) -->
+    <radialGradient id="coreHighlight" cx="0.36" cy="0.30" r="0.6" fx="0.36" fy="0.30">
+      <stop offset="0" stop-color="#FFECCC" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Glow filter to simulate box-shadow -->
+    <filter id="orbGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur1"/>
+      <feColorMatrix in="blur1" type="matrix"
+        values="1 0 0 0 0.1
+                0 0.3 0 0 0
+                0 0 0.1 0 0
+                0 0 0 0.5 0" result="glow1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur2"/>
+      <feColorMatrix in="blur2" type="matrix"
+        values="1 0 0 0 0.1
+                0 0.4 0 0 0
+                0 0 0.1 0 0
+                0 0 0 0.7 0" result="glow2"/>
+      <feMerge>
+        <feMergeNode in="glow1"/>
+        <feMergeNode in="glow2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Outer glow (largest, faintest - simulates 0 0 28px rgba(255,121,34,0.28)) -->
+  <rect x="56" y="56" width="400" height="400" rx="80" fill="#FF7922" opacity="0.15" filter="url(#orbGlow)"/>
+
+  <!-- Main orb body (28px at 28px scale -> 512px scale) -->
+  <rect x="36" y="36" width="440" height="440" rx="88" fill="url(#orbBg)"/>
+
+  <!-- Subtle ring border (matches box-shadow: 0 0 0 1px rgba(255,190,120,0.4)) -->
+  <rect x="36" y="36" width="440" height="440" rx="88"
+    stroke="#FFBE78" stroke-opacity="0.4" stroke-width="3" fill="none"/>
+
+  <!-- Inner core (84% of parent) -->
+  <rect x="71" y="71" width="370" height="370" rx="74"
+    fill="url(#coreHighlight)"
+    stroke="#FFEBCD" stroke-opacity="0.5" stroke-width="2"/>
+
+  <!-- Curly braces { } rendered as paths, styled like the CSS version -->
+  <!-- Left brace { -->
+  <path
+    d="M207 178
+       C192 178 180 190 180 205
+       L180 237
+       C180 247 172 256 162 256
+       C172 256 180 265 180 275
+       L180 307
+       C180 322 192 334 207 334"
+    stroke="#A5540E" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Right brace } (50% opacity to match the component) -->
+  <path
+    d="M305 178
+       C320 178 332 190 332 205
+       L332 237
+       C332 247 340 256 350 256
+       C340 256 332 265 332 275
+       L332 307
+       C332 322 320 334 305 334"
+    stroke="#A5540E" stroke-opacity="0.5" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
