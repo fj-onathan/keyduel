@@ -293,10 +293,12 @@ func (h *Hub) Remove(clientID string, expected *clientConn) {
 			if session.RoomID != "" {
 				if room, ok := h.rooms[session.RoomID]; ok {
 					h.broadcastRoomLocked(room, ServerEvent{
-						Type:     "presence_update",
-						RoomID:   room.ID,
-						ClientID: clientID,
-						Message:  "player disconnected",
+						Type:         "presence_update",
+						RoomID:       room.ID,
+						ClientID:     clientID,
+						Participants: h.snapshotParticipantsForRoomLocked(room),
+						LeaderID:     h.leaderClientIDLocked(room),
+						Message:      "player disconnected",
 					})
 
 					// Reassign leader if the disconnected player was the leader
@@ -320,6 +322,20 @@ func (h *Hub) Count() int {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	return len(h.clients)
+}
+
+// GetRaceInfo returns the current in-memory participant snapshots, status, and
+// snippet length for a race identified by its external raceID. This is used
+// by the REST API so visitors can preview who is in a race before joining.
+func (h *Hub) GetRaceInfo(raceID string) (participants []ParticipantSnapshot, status string, snippetLen int, ok bool) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	for _, room := range h.rooms {
+		if room.RaceID == raceID {
+			return h.snapshotParticipantsForRoomLocked(room), room.Status, len(room.Snippet), true
+		}
+	}
+	return nil, "", 0, false
 }
 
 func (h *Hub) Broadcast(event ServerEvent) {
@@ -367,12 +383,13 @@ func (h *Hub) HandleQueueRace(clientID string, hubName string, mode string, capa
 		if room, ok := h.rooms[session.RoomID]; ok {
 			if room.Status == "waiting" {
 				h.sendLocked(clientID, ServerEvent{
-					Type:       "room_assigned",
-					RoomID:     room.ID,
-					RaceID:     room.RaceID,
-					SnippetLen: len(room.Snippet),
-					Message:    "rejoined race",
-					LeaderID:   h.leaderClientIDLocked(room),
+					Type:         "room_assigned",
+					RoomID:       room.ID,
+					RaceID:       room.RaceID,
+					SnippetLen:   len(room.Snippet),
+					Participants: h.snapshotParticipantsForRoomLocked(room),
+					Message:      "rejoined race",
+					LeaderID:     h.leaderClientIDLocked(room),
 				})
 			} else {
 				h.sendLocked(clientID, ServerEvent{
@@ -535,12 +552,13 @@ func (h *Hub) HandleJoinRace(clientID string, raceID string, reconnectToken stri
 				// Room hasn't started yet — send room_assigned so frontend
 				// shows "Waiting for leader to start..." instead of countdown.
 				h.sendLocked(clientID, ServerEvent{
-					Type:       "room_assigned",
-					RoomID:     targetRoom.ID,
-					RaceID:     targetRoom.RaceID,
-					SnippetLen: len(targetRoom.Snippet),
-					Message:    "rejoined race",
-					LeaderID:   h.leaderClientIDLocked(targetRoom),
+					Type:         "room_assigned",
+					RoomID:       targetRoom.ID,
+					RaceID:       targetRoom.RaceID,
+					SnippetLen:   len(targetRoom.Snippet),
+					Participants: h.snapshotParticipantsForRoomLocked(targetRoom),
+					Message:      "rejoined race",
+					LeaderID:     h.leaderClientIDLocked(targetRoom),
 				})
 			} else {
 				// Room is starting/active/finished — send full race state.
@@ -614,12 +632,13 @@ func (h *Hub) HandleJoinRace(clientID string, raceID string, reconnectToken stri
 		}
 		if targetRoom.Status == "waiting" {
 			h.sendLocked(clientID, ServerEvent{
-				Type:       "room_assigned",
-				RoomID:     targetRoom.ID,
-				RaceID:     targetRoom.RaceID,
-				SnippetLen: len(targetRoom.Snippet),
-				Message:    "rejoined race",
-				LeaderID:   h.leaderClientIDLocked(targetRoom),
+				Type:         "room_assigned",
+				RoomID:       targetRoom.ID,
+				RaceID:       targetRoom.RaceID,
+				SnippetLen:   len(targetRoom.Snippet),
+				Participants: h.snapshotParticipantsForRoomLocked(targetRoom),
+				Message:      "rejoined race",
+				LeaderID:     h.leaderClientIDLocked(targetRoom),
 			})
 		} else {
 			h.sendLocked(clientID, ServerEvent{
@@ -692,12 +711,13 @@ func (h *Hub) HandleJoinRace(clientID string, raceID string, reconnectToken stri
 	}
 
 	h.sendToSessionLocked(session, ServerEvent{
-		Type:       "room_assigned",
-		RoomID:     targetRoom.ID,
-		RaceID:     targetRoom.RaceID,
-		SnippetLen: len(targetRoom.Snippet),
-		Message:    "joined race",
-		LeaderID:   h.leaderClientIDLocked(targetRoom),
+		Type:         "room_assigned",
+		RoomID:       targetRoom.ID,
+		RaceID:       targetRoom.RaceID,
+		SnippetLen:   len(targetRoom.Snippet),
+		Participants: h.snapshotParticipantsForRoomLocked(targetRoom),
+		Message:      "joined race",
+		LeaderID:     h.leaderClientIDLocked(targetRoom),
 	})
 
 	// Notify other participants (include leader info)
@@ -1281,11 +1301,12 @@ func (h *Hub) createRoomLocked(queueKey string, participantTokens []string) *rac
 		session.FinishedAt = nil
 
 		h.sendToSessionLocked(session, ServerEvent{
-			Type:       "room_assigned",
-			RoomID:     roomID,
-			RaceID:     raceID,
-			SnippetLen: len(room.Snippet),
-			Message:    "match found",
+			Type:         "room_assigned",
+			RoomID:       roomID,
+			RaceID:       raceID,
+			SnippetLen:   len(room.Snippet),
+			Participants: h.snapshotParticipantsForRoomLocked(room),
+			Message:      "match found",
 		})
 	}
 

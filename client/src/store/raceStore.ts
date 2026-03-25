@@ -351,6 +351,9 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         if (data.leaderId) {
           updates.leaderId = data.leaderId
         }
+        if (data.participants && data.participants.length > 0) {
+          updates.participants = data.participants
+        }
         set(updates)
         // Persist session for page reload recovery
         const state = get()
