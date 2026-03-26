@@ -36,6 +36,12 @@ function formatHubName(hub: string): string {
   return hubDisplayName[hub.toLowerCase()] ?? hub.charAt(0).toUpperCase() + hub.slice(1)
 }
 
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60)
+  const s = seconds % 60
+  return `${m}:${s.toString().padStart(2, '0')}`
+}
+
 export const RaceHeader = memo(function RaceHeader({
   raceId: _raceId, // eslint-disable-line @typescript-eslint/no-unused-vars -- reserved for future use
   roomId,
@@ -47,6 +53,8 @@ export const RaceHeader = memo(function RaceHeader({
   snippetLen,
   playerCount,
   isLeader,
+  timeRemainingSeconds,
+  isLowTime,
   onJoin,
   onLeaveRoom,
   onStartRace,
@@ -68,6 +76,8 @@ export const RaceHeader = memo(function RaceHeader({
   snippetLen: number
   playerCount: number
   isLeader: boolean
+  timeRemainingSeconds: number
+  isLowTime: boolean
   onJoin: () => void
   onLeaveRoom: () => void
   onStartRace: () => void
@@ -168,6 +178,10 @@ export const RaceHeader = memo(function RaceHeader({
         <div>
           <span>Progress</span>
           <strong>{hud.progressLabel}</strong>
+        </div>
+        <div className={`race-hud-time${phase === 'active' && isLowTime ? ' race-hud-low-time' : ''}`}>
+          <span>Time</span>
+          <strong>{phase === 'active' ? formatTime(timeRemainingSeconds) : '--'}</strong>
         </div>
       </div>
 
