@@ -144,6 +144,68 @@ export function RacePage() {
     return () => { cancelled = true }
   }, [isMock, raceIdParam, hubParam, roomId, results.length, navigate])
 
+  // Pre-join: poll the race-engine REST API every 5s so visitors can see
+  // who's in the room before clicking "Join Race". Once the user joins
+  // (roomId becomes truthy), polling stops and the WebSocket takes over.
+  // This effect ONLY sets participants and snippetLen — never snippet, typed,
+  // countdown, or results — so it cannot affect phase detection.
+  // TODO: Missing logic when user left and it's the leader - other users will not
+  // get error, but can't join and it's annoying, tricky case.
+  useEffect(() => {
+    if (isMock || !raceIdParam) return
+    // Already connected to this room — WebSocket provides live data
+    if (roomId) return
+    // Has a saved session — the auto-rejoin effect will handle it
+    const saved = getSavedSession(raceIdParam)
+    if (saved) return
+    // Already have results (finished race)
+    if (results.length > 0) return
+
+    let cancelled = false
+
+    const fetchInfo = () => {
+      fetch(`${env.raceEngineBaseUrl}/api/races/info/${encodeURIComponent(raceIdParam)}`)
+        .then((res) => {
+          if (!res.ok) {
+            // Room was deleted (everyone left) or race not found — clear
+            // the stale participant list so the viewer sees it go empty.
+            if (!cancelled && !useRaceStore.getState().roomId) {
+              useRaceStore.setState({ participants: [] })
+            }
+            return null
+          }
+          return res.json()
+        })
+        .then((data: { participants?: ParticipantSnapshot[]; snippetLen?: number; status?: string } | null) => {
+          if (cancelled || !data) return
+          // Only populate if the user still hasn't joined
+          const currentState = useRaceStore.getState()
+          if (currentState.roomId) return
+          const updates: Partial<{ participants: ParticipantSnapshot[]; snippetLen: number }> = {}
+          updates.participants = data.participants ?? []
+          if (data.snippetLen && data.snippetLen > 0) {
+            updates.snippetLen = data.snippetLen
+          }
+          useRaceStore.setState(updates)
+        })
+        .catch(() => {
+          // Network error — clear participants to avoid stale data
+          if (!cancelled && !useRaceStore.getState().roomId) {
+            useRaceStore.setState({ participants: [] })
+          }
+        })
+    }
+
+    // Fetch immediately, then poll every 5s
+    fetchInfo()
+    const interval = window.setInterval(fetchInfo, 5_000)
+
+    return () => {
+      cancelled = true
+      window.clearInterval(interval)
+    }
+  }, [isMock, raceIdParam, roomId, results.length])
+
   // Auto-rejoin only on page refresh (when a saved session exists for this
   // race). Fresh visitors must click "Join Race" manually.
   useEffect(() => {
@@ -371,7 +433,13 @@ export function RacePage() {
       return
     }
     leaveRoom()
-    disconnect()
+    // Give the WebSocket frame time to reach the server before tearing
+    // down the connection. Without this, disconnect() closes the socket
+    // before the leave_room message is delivered, so other participants
+    // never get a presence_update with the updated roster.
+    setTimeout(() => {
+      disconnect()
+    }, 100)
     void navigate('/race')
   }, [disconnect, isMock, leaveRoom, navigate, resetMockRace])
 

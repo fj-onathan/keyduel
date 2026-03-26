@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -58,6 +59,7 @@ func main() {
 		_, _ = w.Write([]byte("ok"))
 	})
 	mux.HandleFunc("/api/races/find-or-create", corsMiddleware(cfg.CORSOrigin, handleFindOrCreateRace(hub)))
+	mux.HandleFunc("/api/races/info/", corsMiddleware(cfg.CORSOrigin, handleRaceInfo(hub)))
 	mux.HandleFunc("/api/stats/online", corsMiddleware(cfg.CORSOrigin, handleOnlineCount(hub)))
 
 	server := &http.Server{
@@ -146,6 +148,36 @@ func handleOnlineCount(hub *ws.Hub) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]int{
 			"onlinePlayers": hub.Count(),
+		})
+	}
+}
+
+func handleRaceInfo(hub *ws.Hub) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, `{"error":{"message":"method not allowed"}}`, http.StatusMethodNotAllowed)
+			return
+		}
+
+		raceID := strings.TrimPrefix(r.URL.Path, "/api/races/info/")
+		raceID = strings.TrimSpace(strings.Trim(raceID, "/"))
+		if raceID == "" {
+			http.Error(w, `{"error":{"message":"race id is required"}}`, http.StatusBadRequest)
+			return
+		}
+
+		participants, status, snippetLen, ok := hub.GetRaceInfo(raceID)
+		if !ok {
+			http.Error(w, `{"error":{"message":"race not found"}}`, http.StatusNotFound)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"raceId":       raceID,
+			"status":       status,
+			"snippetLen":   snippetLen,
+			"participants": participants,
 		})
 	}
 }
