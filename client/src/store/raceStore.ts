@@ -30,7 +30,6 @@ type RaceStore = {
   joinRace: (raceId: string) => void
   startRace: () => void
   typeInput: (value: string) => void
-  debugFinish: () => void
 }
 
 // ── private module-scoped state ──────────────────────────────────────────────
@@ -665,20 +664,6 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
     set({ typed: sliced })
 
     throttledInput(sliced.length, errors)
-  },
-
-  debugFinish: () => {
-    const { snippet } = get()
-    if (!snippet) return
-    set({ typed: snippet })
-    // Clear any pending throttled input to avoid sending stale partial
-    // progress right before the final event (which would trigger anti-cheat).
-    pendingInput = null
-    if (inputThrottleTimer !== null) {
-      clearTimeout(inputThrottleTimer)
-      inputThrottleTimer = null
-    }
-    sendEvent({ type: 'race_input', progress: snippet.length, errors: 0 })
   },
 }))
 

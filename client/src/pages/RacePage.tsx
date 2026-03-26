@@ -36,7 +36,6 @@ export function RacePage() {
   const joinRace = useRaceStore((state) => state.joinRace)
   const startRace = useRaceStore((state) => state.startRace)
   const typeInput = useRaceStore((state) => state.typeInput)
-  const debugFinish = useRaceStore((state) => state.debugFinish)
   const socketState = useRaceStore((state) => state.socketState)
   const statusMessage = useRaceStore((state) => state.statusMessage)
   const clientId = useRaceStore((state) => state.clientId)
@@ -470,7 +469,6 @@ export function RacePage() {
         onLeaveRoom={handleLeaveRoom}
         onStartRace={handleStartRace}
         onRaceAgain={handleRaceAgain}
-        onDebugFinish={debugFinish}
       />
 
       <div className="race-main-grid">
