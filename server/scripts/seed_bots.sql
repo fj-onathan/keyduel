@@ -1,3 +1,5 @@
+-- DISCLAIMER: This script is created by AI (Github Copilot).
+
 -- seed_bots.sql
 -- Idempotent seed file for bot users, profiles, and historical race data.
 -- Populates leaderboards, hubs, profiles, and platform stats with realistic activity.

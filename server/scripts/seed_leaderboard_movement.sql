@@ -1,3 +1,5 @@
+-- DISCLAIMER: This script is created by AI (Github Copilot).
+
 BEGIN;
 
 DO $$

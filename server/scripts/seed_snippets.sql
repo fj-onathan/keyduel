@@ -1,3 +1,5 @@
+-- DISCLAIMER: This script is created by AI (Github Copilot).
+
 -- seed_snippets.sql
 -- Idempotent seed file for typing race snippets.
 -- Safe to re-run: uses WHERE NOT EXISTS to skip duplicates.
