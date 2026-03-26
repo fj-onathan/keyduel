@@ -59,7 +59,6 @@ export const RaceHeader = memo(function RaceHeader({
   onLeaveRoom,
   onStartRace,
   onRaceAgain,
-  onDebugFinish,
 }: {
   raceId: string
   roomId: string
@@ -82,7 +81,6 @@ export const RaceHeader = memo(function RaceHeader({
   onLeaveRoom: () => void
   onStartRace: () => void
   onRaceAgain: () => void
-  onDebugFinish: () => void
 }) {
   const isConnected = socketState === 'connected'
   const isIdle = socketState === 'idle' || socketState === 'disconnected'
@@ -212,9 +210,6 @@ export const RaceHeader = memo(function RaceHeader({
           <Button variant="primary" onClick={isMobile ? () => setMobileWarningOpen(true) : onRaceAgain}>
             Race Again
           </Button>
-        ) : null}
-        {phase === 'active' ? (
-          <Button onClick={onDebugFinish}>Finish Race (Debug)</Button>
         ) : null}
       </div>
 
