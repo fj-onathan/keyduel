@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="client/public/logo.png" alt="KeyDuel" width="80" height="80" />
+  <img src="client/public/logo.png" alt="KeyDuel" width="100" height="100" />
 </p>
 
 <h1 align="center">KeyDuel</h1>
