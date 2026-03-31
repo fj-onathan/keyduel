@@ -33,7 +33,6 @@ type RaceStore = {
   confirmStart: (addBots: boolean) => void
   cancelSoloConfirm: () => void
   typeInput: (value: string) => void
-  debugFinish: () => void
 }
 
 // ── private module-scoped state ──────────────────────────────────────────────
