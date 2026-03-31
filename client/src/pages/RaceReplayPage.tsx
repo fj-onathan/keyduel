@@ -261,6 +261,8 @@ export function RaceReplayPage() {
           progressPercent={100}
           phase="finished"
           difficulty={data.difficulty}
+          timeRemainingSeconds={0}
+          isLowTime={false}
           onType={() => {}}
         />
         <RaceStandings

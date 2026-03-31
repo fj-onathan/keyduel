@@ -400,18 +400,23 @@ func (h *Hub) HandleQueueRace(clientID string, hubName string, mode string, capa
 					LeaderID:     h.leaderClientIDLocked(room),
 				})
 			} else {
-				h.sendLocked(clientID, ServerEvent{
-					Type:         "race_resumed",
-					RoomID:       room.ID,
-					RaceID:       room.RaceID,
-					Snippet:      room.Snippet,
-					SnippetLen:   len(room.Snippet),
-					Countdown:    room.Countdown,
-					Participants: h.snapshotParticipantsForRoomLocked(room),
-					Message:      roomStatusMessage(room),
-					LeaderID:     h.leaderClientIDLocked(room),
-					YourProgress: session.Progress,
-				})
+				evt := ServerEvent{
+					Type:           "race_resumed",
+					RoomID:         room.ID,
+					RaceID:         room.RaceID,
+					Snippet:        room.Snippet,
+					SnippetLen:     len(room.Snippet),
+					Countdown:      room.Countdown,
+					Participants:   h.snapshotParticipantsForRoomLocked(room),
+					Message:        roomStatusMessage(room),
+					LeaderID:       h.leaderClientIDLocked(room),
+					YourProgress:   session.Progress,
+					RaceDurationMS: 90000,
+				}
+				if room.RaceActive && !room.RaceStartedAt.IsZero() {
+					evt.ElapsedMS = time.Since(room.RaceStartedAt).Milliseconds()
+				}
+				h.sendLocked(clientID, evt)
 			}
 			return
 		}
@@ -570,18 +575,23 @@ func (h *Hub) HandleJoinRace(clientID string, raceID string, reconnectToken stri
 				})
 			} else {
 				// Room is starting/active/finished — send full race state.
-				h.sendLocked(clientID, ServerEvent{
-					Type:         "race_resumed",
-					RoomID:       targetRoom.ID,
-					RaceID:       targetRoom.RaceID,
-					Snippet:      targetRoom.Snippet,
-					SnippetLen:   len(targetRoom.Snippet),
-					Countdown:    targetRoom.Countdown,
-					Participants: h.snapshotParticipantsForRoomLocked(targetRoom),
-					Message:      roomStatusMessage(targetRoom),
-					LeaderID:     h.leaderClientIDLocked(targetRoom),
-					YourProgress: session.Progress,
-				})
+				evt := ServerEvent{
+					Type:           "race_resumed",
+					RoomID:         targetRoom.ID,
+					RaceID:         targetRoom.RaceID,
+					Snippet:        targetRoom.Snippet,
+					SnippetLen:     len(targetRoom.Snippet),
+					Countdown:      targetRoom.Countdown,
+					Participants:   h.snapshotParticipantsForRoomLocked(targetRoom),
+					Message:        roomStatusMessage(targetRoom),
+					LeaderID:       h.leaderClientIDLocked(targetRoom),
+					YourProgress:   session.Progress,
+					RaceDurationMS: 90000,
+				}
+				if targetRoom.RaceActive && !targetRoom.RaceStartedAt.IsZero() {
+					evt.ElapsedMS = time.Since(targetRoom.RaceStartedAt).Milliseconds()
+				}
+				h.sendLocked(clientID, evt)
 			}
 
 			// Notify others of the reconnection
@@ -649,18 +659,23 @@ func (h *Hub) HandleJoinRace(clientID string, raceID string, reconnectToken stri
 				LeaderID:     h.leaderClientIDLocked(targetRoom),
 			})
 		} else {
-			h.sendLocked(clientID, ServerEvent{
-				Type:         "race_resumed",
-				RoomID:       targetRoom.ID,
-				RaceID:       targetRoom.RaceID,
-				Snippet:      targetRoom.Snippet,
-				SnippetLen:   len(targetRoom.Snippet),
-				Countdown:    targetRoom.Countdown,
-				Participants: h.snapshotParticipantsForRoomLocked(targetRoom),
-				Message:      roomStatusMessage(targetRoom),
-				LeaderID:     h.leaderClientIDLocked(targetRoom),
-				YourProgress: session.Progress,
-			})
+			evt := ServerEvent{
+				Type:           "race_resumed",
+				RoomID:         targetRoom.ID,
+				RaceID:         targetRoom.RaceID,
+				Snippet:        targetRoom.Snippet,
+				SnippetLen:     len(targetRoom.Snippet),
+				Countdown:      targetRoom.Countdown,
+				Participants:   h.snapshotParticipantsForRoomLocked(targetRoom),
+				Message:        roomStatusMessage(targetRoom),
+				LeaderID:       h.leaderClientIDLocked(targetRoom),
+				YourProgress:   session.Progress,
+				RaceDurationMS: 90000,
+			}
+			if targetRoom.RaceActive && !targetRoom.RaceStartedAt.IsZero() {
+				evt.ElapsedMS = time.Since(targetRoom.RaceStartedAt).Milliseconds()
+			}
+			h.sendLocked(clientID, evt)
 		}
 		return
 	}
@@ -1389,12 +1404,13 @@ func (h *Hub) runRoomCountdown(roomID string) {
 	}
 
 	h.broadcastRoomLocked(room, ServerEvent{
-		Type:         "race_started",
-		RoomID:       room.ID,
-		RaceID:       room.RaceID,
-		Snippet:      room.Snippet,
-		SnippetLen:   len(room.Snippet),
-		Participants: h.snapshotParticipantsForRoomLocked(room),
+		Type:           "race_started",
+		RoomID:         room.ID,
+		RaceID:         room.RaceID,
+		Snippet:        room.Snippet,
+		SnippetLen:     len(room.Snippet),
+		RaceDurationMS: 90000,
+		Participants:   h.snapshotParticipantsForRoomLocked(room),
 	})
 	h.mu.Unlock()
 

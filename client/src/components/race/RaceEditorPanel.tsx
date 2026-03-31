@@ -2,6 +2,12 @@ import { memo, useEffect, useMemo, useRef, useState, type ChangeEvent, type Clip
 import { playCountdownTick, playGoBeep, playKeystrokeClick } from '../../lib/sounds'
 import { useUIStore } from '../../store/uiStore'
 
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60)
+  const s = seconds % 60
+  return `${m}:${s.toString().padStart(2, '0')}`
+}
+
 const syntaxKeywords = new Set([
   'break',
   'case',
@@ -151,6 +157,8 @@ export const RaceEditorPanel = memo(function RaceEditorPanel({
   phase,
   difficulty,
   avgTime,
+  timeRemainingSeconds,
+  isLowTime,
   onType,
 }: {
   snippet: string
@@ -160,6 +168,8 @@ export const RaceEditorPanel = memo(function RaceEditorPanel({
   phase: 'queued' | 'countdown' | 'active' | 'finished'
   difficulty?: number
   avgTime?: number
+  timeRemainingSeconds: number
+  isLowTime: boolean
   onType: (value: string) => void
 }) {
   const phraseRef = useRef<HTMLDivElement | null>(null)
@@ -401,6 +411,9 @@ export const RaceEditorPanel = memo(function RaceEditorPanel({
       </div>
 
       <div className="race-editor-metrics" aria-label="Race typing metrics">
+        {phase === 'active' ? (
+          <span className={isLowTime ? 'race-timer-low' : ''}>{formatTime(timeRemainingSeconds)} left</span>
+        ) : null}
         <span>{raceMetrics.typedChars} typed</span>
         <span>{raceMetrics.remainingChars} left</span>
         <span>{raceMetrics.errors} errors</span>

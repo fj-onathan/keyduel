@@ -78,6 +78,8 @@ export type ServerEvent = {
   snippet?: string
   snippetLen?: number
   durationMs?: number
+  raceDurationMs?: number
+  elapsedMs?: number
   participants?: ParticipantSnapshot[]
   results?: RaceResult[]
   leaderId?: string

@@ -25,25 +25,27 @@ type ClientEvent struct {
 }
 
 type ServerEvent struct {
-	Type         string                `json:"type"`
-	RoomID       string                `json:"roomId,omitempty"`
-	RaceID       string                `json:"raceId,omitempty"`
-	ClientID     string                `json:"clientId,omitempty"`
-	DisplayName  string                `json:"displayName,omitempty"`
-	AvatarURL    string                `json:"avatarUrl,omitempty"`
-	Connected    int                   `json:"connected"`
-	SessionToken string                `json:"sessionToken,omitempty"`
-	QueueKey     string                `json:"queueKey,omitempty"`
-	Position     int                   `json:"position"`
-	Message      string                `json:"message,omitempty"`
-	Countdown    int                   `json:"countdown"`
-	Snippet      string                `json:"snippet,omitempty"`
-	SnippetLen   int                   `json:"snippetLen"`
-	DurationMS   int64                 `json:"durationMs,omitempty"`
-	Participants []ParticipantSnapshot `json:"participants,omitempty"`
-	Results      []RaceResult          `json:"results,omitempty"`
-	LeaderID     string                `json:"leaderId,omitempty"`
-	YourProgress int                   `json:"yourProgress"`
+	Type           string                `json:"type"`
+	RoomID         string                `json:"roomId,omitempty"`
+	RaceID         string                `json:"raceId,omitempty"`
+	ClientID       string                `json:"clientId,omitempty"`
+	DisplayName    string                `json:"displayName,omitempty"`
+	AvatarURL      string                `json:"avatarUrl,omitempty"`
+	Connected      int                   `json:"connected"`
+	SessionToken   string                `json:"sessionToken,omitempty"`
+	QueueKey       string                `json:"queueKey,omitempty"`
+	Position       int                   `json:"position"`
+	Message        string                `json:"message,omitempty"`
+	Countdown      int                   `json:"countdown"`
+	Snippet        string                `json:"snippet,omitempty"`
+	SnippetLen     int                   `json:"snippetLen"`
+	DurationMS     int64                 `json:"durationMs,omitempty"`
+	RaceDurationMS int64                 `json:"raceDurationMs,omitempty"`
+	ElapsedMS      int64                 `json:"elapsedMs,omitempty"`
+	Participants   []ParticipantSnapshot `json:"participants,omitempty"`
+	Results        []RaceResult          `json:"results,omitempty"`
+	LeaderID       string                `json:"leaderId,omitempty"`
+	YourProgress   int                   `json:"yourProgress"`
 }
 
 type ParticipantSnapshot struct {
