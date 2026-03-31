@@ -36,6 +36,12 @@ function formatHubName(hub: string): string {
   return hubDisplayName[hub.toLowerCase()] ?? hub.charAt(0).toUpperCase() + hub.slice(1)
 }
 
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60)
+  const s = seconds % 60
+  return `${m}:${s.toString().padStart(2, '0')}`
+}
+
 export const RaceHeader = memo(function RaceHeader({
   raceId: _raceId, // eslint-disable-line @typescript-eslint/no-unused-vars -- reserved for future use
   roomId,
@@ -47,11 +53,12 @@ export const RaceHeader = memo(function RaceHeader({
   snippetLen,
   playerCount,
   isLeader,
+  timeRemainingSeconds,
+  isLowTime,
   onJoin,
   onLeaveRoom,
   onStartRace,
   onRaceAgain,
-  onDebugFinish,
 }: {
   raceId: string
   roomId: string
@@ -68,11 +75,12 @@ export const RaceHeader = memo(function RaceHeader({
   snippetLen: number
   playerCount: number
   isLeader: boolean
+  timeRemainingSeconds: number
+  isLowTime: boolean
   onJoin: () => void
   onLeaveRoom: () => void
   onStartRace: () => void
   onRaceAgain: () => void
-  onDebugFinish: () => void
 }) {
   const isConnected = socketState === 'connected'
   const isIdle = socketState === 'idle' || socketState === 'disconnected'
@@ -169,6 +177,10 @@ export const RaceHeader = memo(function RaceHeader({
           <span>Progress</span>
           <strong>{hud.progressLabel}</strong>
         </div>
+        <div className={`race-hud-time${phase === 'active' && isLowTime ? ' race-hud-low-time' : ''}`}>
+          <span>Time</span>
+          <strong>{phase === 'active' ? formatTime(timeRemainingSeconds) : '--'}</strong>
+        </div>
       </div>
 
       <p className={`race-state-note is-${phase}`}>
@@ -198,9 +210,6 @@ export const RaceHeader = memo(function RaceHeader({
           <Button variant="primary" onClick={isMobile ? () => setMobileWarningOpen(true) : onRaceAgain}>
             Race Again
           </Button>
-        ) : null}
-        {phase === 'active' ? (
-          <Button onClick={onDebugFinish}>Finish Race (Debug)</Button>
         ) : null}
       </div>
 

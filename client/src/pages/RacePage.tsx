@@ -38,7 +38,6 @@ export function RacePage() {
   const joinRace = useRaceStore((state) => state.joinRace)
   const startRace = useRaceStore((state) => state.startRace)
   const typeInput = useRaceStore((state) => state.typeInput)
-  const debugFinish = useRaceStore((state) => state.debugFinish)
   const socketState = useRaceStore((state) => state.socketState)
   const statusMessage = useRaceStore((state) => state.statusMessage)
   const clientId = useRaceStore((state) => state.clientId)
@@ -51,6 +50,8 @@ export function RacePage() {
   const hub = useRaceStore((state) => state.hub)
   const leaderId = useRaceStore((state) => state.leaderId)
   const snippetLen = useRaceStore((state) => state.snippetLen)
+  const raceDurationMs = useRaceStore((state) => state.raceDurationMs)
+  const raceStartedAt = useRaceStore((state) => state.raceStartedAt)
   const storeRaceId = useRaceStore((state) => state.raceId)
   const pendingSoloConfirm = useRaceStore((state) => state.pendingSoloConfirm)
   const confirmStart = useRaceStore((state) => state.confirmStart)
@@ -59,6 +60,7 @@ export function RacePage() {
   const [mockTyped, setMockTyped] = useState('')
   const [mockCountdown, setMockCountdown] = useState(3)
   const [mockElapsedMs, setMockElapsedMs] = useState(0)
+  const [timeRemainingMs, setTimeRemainingMs] = useState(0)
   const navigate = useNavigate()
   const addToast = useToastStore((state) => state.addToast)
   const soundEnabled = useUIStore((state) => state.soundEnabled)
@@ -345,6 +347,31 @@ export function RacePage() {
     prevPhaseRef.current = phase
   }, [phase, soundEnabled])
 
+  // Race countdown timer — tick every second while race is active
+  useEffect(() => {
+    if (phase !== 'active') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset timer when leaving active phase
+      setTimeRemainingMs(0)
+      return
+    }
+    if (isMock) {
+      setTimeRemainingMs(Math.max(0, 90000 - mockElapsedMs))
+      return
+    }
+    if (raceDurationMs <= 0 || raceStartedAt <= 0) {
+      return
+    }
+    // Set immediately, then tick every second
+    setTimeRemainingMs(Math.max(0, raceDurationMs - (Date.now() - raceStartedAt)))
+    const timer = window.setInterval(() => {
+      setTimeRemainingMs(Math.max(0, raceDurationMs - (Date.now() - raceStartedAt)))
+    }, 1000)
+    return () => window.clearInterval(timer)
+  }, [phase, isMock, mockElapsedMs, raceDurationMs, raceStartedAt])
+
+  const timeRemainingSeconds = Math.ceil(timeRemainingMs / 1000)
+  const isLowTime = phase === 'active' && timeRemainingSeconds <= 15
+
   const statusMessageValue = useMemo(() => {
     if (!isMock) {
       return statusMessage
@@ -509,11 +536,12 @@ export function RacePage() {
         snippetLen={snippetLength || snippetLen}
         playerCount={participantsValue.length}
         isLeader={!isMock && clientId !== '' && leaderId === clientId}
+        timeRemainingSeconds={timeRemainingSeconds}
+        isLowTime={isLowTime}
         onJoin={handleJoin}
         onLeaveRoom={handleLeaveRoom}
         onStartRace={handleStartRace}
         onRaceAgain={handleRaceAgain}
-        onDebugFinish={debugFinish}
       />
 
       <div className="race-main-grid">
@@ -525,6 +553,8 @@ export function RacePage() {
           phase={phase}
           difficulty={isMock ? 2 : undefined}
           avgTime={isMock ? 45 : undefined}
+          timeRemainingSeconds={timeRemainingSeconds}
+          isLowTime={isLowTime}
           onType={handleType}
         />
         <RaceStandings participants={sortedParticipants} clientId={clientId || 'you-local'} snippetLength={snippetLength} phase={phase} />

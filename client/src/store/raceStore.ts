@@ -18,6 +18,8 @@ type RaceStore = {
   snippetLen: number
   typed: string
   countdown: number
+  raceDurationMs: number
+  raceStartedAt: number
   participants: ServerEvent['participants']
   results: RaceResult[]
   statusMessage: string
@@ -244,6 +246,8 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
   snippetLen: 0,
   typed: '',
   countdown: 0,
+  raceDurationMs: 0,
+  raceStartedAt: 0,
   participants: [],
   results: [],
   statusMessage: 'Select a hub to start racing',
@@ -371,12 +375,16 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
       if (data.type === 'race_resumed') {
         const snippetText = data.snippet ?? ''
         const yourProgress = data.yourProgress ?? 0
+        const raceDurationMs = data.raceDurationMs ?? 90000
+        const elapsedMs = data.elapsedMs ?? 0
         const updates: Partial<RaceStore> = {
           roomId: data.roomId ?? '',
           raceId: data.raceId ?? '',
           snippet: snippetText,
           snippetLen: snippetText.length || get().snippetLen,
           countdown: data.countdown ?? 0,
+          raceDurationMs,
+          raceStartedAt: elapsedMs > 0 ? Date.now() - elapsedMs : 0,
           participants: data.participants ?? [],
           statusMessage: data.message ?? 'Race resumed',
         }
@@ -419,6 +427,8 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
           snippetLen: data.snippetLen ?? 0,
           typed: '',
           countdown: 0,
+          raceDurationMs: data.raceDurationMs ?? 90000,
+          raceStartedAt: Date.now(),
           participants: data.participants ?? [],
           statusMessage: 'Race active!',
         })
@@ -459,6 +469,8 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         set({
           reconnectToken: '',
           countdown: 0,
+          raceDurationMs: 0,
+          raceStartedAt: 0,
           pendingSoloConfirm: false,
           results: data.results ?? [],
           statusMessage: `Race finished: ${data.message ?? 'done'}`,
@@ -600,6 +612,8 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
       snippetLen: 0,
       typed: '',
       countdown: 0,
+      raceDurationMs: 0,
+      raceStartedAt: 0,
       participants: [],
       results: [],
       pendingSoloConfirm: false,
@@ -689,20 +703,6 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
     set({ typed: sliced })
 
     throttledInput(sliced.length, errors)
-  },
-
-  debugFinish: () => {
-    const { snippet } = get()
-    if (!snippet) return
-    set({ typed: snippet })
-    // Clear any pending throttled input to avoid sending stale partial
-    // progress right before the final event (which would trigger anti-cheat).
-    pendingInput = null
-    if (inputThrottleTimer !== null) {
-      clearTimeout(inputThrottleTimer)
-      inputThrottleTimer = null
-    }
-    sendEvent({ type: 'race_input', progress: snippet.length, errors: 0 })
   },
 }))
 

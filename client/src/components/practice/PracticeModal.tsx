@@ -195,6 +195,8 @@ export const PracticeModal = memo(function PracticeModal({
           progressPercent={progressPercent}
           phase={loading ? 'queued' : phase === 'finished' ? 'finished' : 'active'}
           difficulty={snippet.difficulty}
+          timeRemainingSeconds={0}
+          isLowTime={false}
           onType={handleType}
         />
 
