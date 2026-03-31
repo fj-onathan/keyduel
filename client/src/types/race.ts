@@ -28,7 +28,10 @@ export type ClientEvent =
   type: 'race_input'
   progress: number
   errors: number
-}
+} | {
+      type: 'confirm_start'
+      addBots: boolean
+    }
   | {
   type: 'heartbeat'
   reconnectToken?: string
@@ -44,6 +47,7 @@ export type ParticipantSnapshot = {
   netWpm: number
   accuracy: number
   finished: boolean
+  isBot?: boolean
 }
 
 export type RaceResult = {
@@ -60,6 +64,7 @@ export type RaceResult = {
   finished: boolean
   finishedElapsedMs: number
   suspicious: boolean
+  isBot?: boolean
 }
 
 export type ServerEvent = {

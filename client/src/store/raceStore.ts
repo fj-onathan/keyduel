@@ -23,12 +23,15 @@ type RaceStore = {
   participants: ServerEvent['participants']
   results: RaceResult[]
   statusMessage: string
+  pendingSoloConfirm: boolean
   connect: () => void
   disconnect: () => void
   leaveRoom: () => void
   queueRace: (hub: string, mode: string, capacity: number) => void
   joinRace: (raceId: string) => void
   startRace: () => void
+  confirmStart: (addBots: boolean) => void
+  cancelSoloConfirm: () => void
   typeInput: (value: string) => void
 }
 
@@ -247,6 +250,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
   participants: [],
   results: [],
   statusMessage: 'Select a hub to start racing',
+  pendingSoloConfirm: false,
 
   connect: () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -339,6 +343,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
           participants: [],
           results: [],
           leaderId: '',
+          pendingSoloConfirm: false,
           statusMessage: 'Left room',
         })
         return
@@ -467,6 +472,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
           countdown: 0,
           participants: [],
           results: [],
+          pendingSoloConfirm: false,
           statusMessage: data.message ?? 'Race cancelled',
         })
         return
@@ -479,6 +485,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
           countdown: 0,
           raceDurationMs: 0,
           raceStartedAt: 0,
+          pendingSoloConfirm: false,
           results: data.results ?? [],
           statusMessage: `Race finished: ${data.message ?? 'done'}`,
         })
@@ -489,6 +496,16 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         const updates: Partial<RaceStore> = {}
         if (data.participants !== undefined) {
           updates.participants = data.participants
+
+          // If another real player joined while the solo-confirm dialog is
+          // open, auto-dismiss it — no need for bots anymore.
+          const state = get()
+          if (state.pendingSoloConfirm && data.participants) {
+            const realCount = data.participants.filter((p) => !p.isBot).length
+            if (realCount >= 2) {
+              updates.pendingSoloConfirm = false
+            }
+          }
         }
         if (data.leaderId) {
           updates.leaderId = data.leaderId
@@ -496,6 +513,14 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         if (Object.keys(updates).length > 0) {
           set(updates)
         }
+        return
+      }
+
+      if (data.type === 'confirm_solo_start') {
+        set({
+          pendingSoloConfirm: true,
+          statusMessage: data.message ?? 'No other participants. Add bots?',
+        })
         return
       }
 
@@ -610,6 +635,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
       raceStartedAt: 0,
       participants: [],
       results: [],
+      pendingSoloConfirm: false,
       statusMessage: 'Select a hub to start racing',
     })
   },
@@ -668,6 +694,15 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
 
   startRace: () => {
     sendEvent({type: 'start_race'})
+  },
+
+  confirmStart: (addBots: boolean) => {
+    sendEvent({ type: 'confirm_start', addBots })
+    set({ pendingSoloConfirm: false })
+  },
+
+  cancelSoloConfirm: () => {
+    set({ pendingSoloConfirm: false, statusMessage: 'Waiting for more players...' })
   },
 
   typeInput: (value: string) => {

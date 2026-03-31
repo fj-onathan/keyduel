@@ -4,8 +4,10 @@ import {RaceEditorPanel} from '../components/race/RaceEditorPanel'
 import {RaceHeader} from '../components/race/RaceHeader'
 import {RaceResults} from '../components/race/RaceResults'
 import {RaceStandings} from '../components/race/RaceStandings'
-import {playFinishSound} from '../lib/sounds'
-import {getSavedSession, useRaceStore} from '../store/raceStore'
+import { Modal } from '../components/ui/Modal'
+import { Button } from '../components/ui/Button'
+import { playFinishSound } from '../lib/sounds'
+import { useRaceStore, getSavedSession } from '../store/raceStore'
 import {useToastStore} from '../store/toastStore'
 import {useUIStore} from '../store/uiStore'
 import {env} from '../config/env'
@@ -51,6 +53,9 @@ export function RacePage() {
   const raceDurationMs = useRaceStore((state) => state.raceDurationMs)
   const raceStartedAt = useRaceStore((state) => state.raceStartedAt)
   const storeRaceId = useRaceStore((state) => state.raceId)
+  const pendingSoloConfirm = useRaceStore((state) => state.pendingSoloConfirm)
+  const confirmStart = useRaceStore((state) => state.confirmStart)
+  const cancelSoloConfirm = useRaceStore((state) => state.cancelSoloConfirm)
 
   const [mockTyped, setMockTyped] = useState('')
   const [mockCountdown, setMockCountdown] = useState(3)
@@ -560,6 +565,19 @@ export function RacePage() {
 
       <RaceResults results={resultsValue}
                    replayUrl={!isMock && raceIdParam ? `/race/${hubParam ?? 'go'}/${raceIdParam}/replay` : undefined}/>
+      <Modal open={pendingSoloConfirm} onClose={cancelSoloConfirm} title="Start Solo Race?">
+        <div className="solo-confirm-body">
+          <p className="solo-confirm-message">
+            You are the only participant. Bot opponents will be added to race with you.
+          </p>
+          <div className="solo-confirm-actions">
+            <Button variant="primary" onClick={() => confirmStart(true)}>
+              Start with Bots
+            </Button>
+            <Button onClick={cancelSoloConfirm}>Cancel</Button>
+          </div>
+        </div>
+      </Modal>
     </main>
   )
 }

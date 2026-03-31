@@ -65,6 +65,12 @@ func (p *Persistence) PersistRace(ctx context.Context, snapshot ws.RaceSnapshot)
 			continue
 		}
 
+		// Skip bot participants — they should not be persisted to the
+		// database to avoid inflating leaderboards and stats.
+		if result.IsBot {
+			continue
+		}
+
 		var userID string
 		if result.AuthUserID != "" {
 			// Authenticated user — use the real database user ID directly.

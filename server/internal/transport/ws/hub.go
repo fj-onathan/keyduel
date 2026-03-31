@@ -108,6 +108,9 @@ type playerSession struct {
 	LastInputAt    *time.Time
 	LastProgress   int
 	SuspicionCount int
+	IsBot          bool    // true for injected bot participants
+	BotBaseWPM     float64 // base WPM for bot typing simulation
+	BotBaseAcc     float64 // base accuracy for bot typing simulation
 }
 
 type raceRoom struct {
@@ -838,6 +841,7 @@ func (h *Hub) HandleLeaveRoom(clientID string) {
 
 	// Clean up empty rooms
 	if len(room.Participants) == 0 {
+		h.cleanupBotSessionsLocked(room)
 		delete(h.rooms, room.ID)
 	} else {
 		// Notify remaining participants
@@ -889,6 +893,65 @@ func (h *Hub) HandleStartRace(clientID string) {
 		return
 	}
 
+	// If the leader is alone, ask for confirmation before starting with bots.
+	realCount := h.realParticipantsForRoomLocked(room)
+	if realCount < 2 {
+		h.sendLocked(clientID, ServerEvent{
+			Type:    "confirm_solo_start",
+			RoomID:  room.ID,
+			RaceID:  room.RaceID,
+			Message: "You are the only participant. Bot opponents will be added to race with you.",
+		})
+		return
+	}
+
+	h.selectSnippetAndStartLocked(room)
+}
+
+// HandleConfirmStart is called when the leader confirms starting a solo race.
+// If addBots is true, bot participants are injected before the countdown.
+func (h *Hub) HandleConfirmStart(clientID string, addBots bool) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	token := h.clientToSession[clientID]
+	if token == "" {
+		h.sendLocked(clientID, ServerEvent{Type: "error", Message: "session not found"})
+		return
+	}
+
+	session, ok := h.sessions[token]
+	if !ok || session.RoomID == "" {
+		h.sendLocked(clientID, ServerEvent{Type: "error", Message: "not in a room"})
+		return
+	}
+
+	room, ok := h.rooms[session.RoomID]
+	if !ok {
+		h.sendLocked(clientID, ServerEvent{Type: "error", Message: "room not found"})
+		return
+	}
+
+	if room.RaceActive || room.FinishedAt != nil {
+		h.sendLocked(clientID, ServerEvent{Type: "error", Message: "race already started or finished"})
+		return
+	}
+
+	if room.LeaderToken != token {
+		h.sendLocked(clientID, ServerEvent{Type: "error", Message: "only the leader can start the race"})
+		return
+	}
+
+	if addBots {
+		h.injectBotsLocked(room)
+	}
+
+	h.selectSnippetAndStartLocked(room)
+}
+
+// selectSnippetAndStartLocked picks a snippet and begins the countdown.
+// Must be called with h.mu held.
+func (h *Hub) selectSnippetAndStartLocked(room *raceRoom) {
 	// Select a snippet for the hub's language
 	snippet := defaultSnippet
 	if h.snippetProvider != nil {
@@ -904,6 +967,19 @@ func (h *Hub) HandleStartRace(clientID string) {
 
 	room.Snippet = snippet
 	h.startRoomCountdownLocked(room)
+}
+
+// realParticipantsForRoomLocked counts non-bot connected participants.
+func (h *Hub) realParticipantsForRoomLocked(room *raceRoom) int {
+	count := 0
+	for _, token := range room.Participants {
+		session, ok := h.sessions[token]
+		if !ok || session.IsBot || session.ClientID == "" {
+			continue
+		}
+		count++
+	}
+	return count
 }
 
 func (h *Hub) HandleHeartbeat(clientID string, reconnectToken string) {
@@ -1085,6 +1161,7 @@ func (h *Hub) StartCleanupSweep(interval time.Duration) {
 							h.finishRaceForRoomLocked(room, "insufficient_players")
 						}
 						if len(room.Participants) == 0 {
+							h.cleanupBotSessionsLocked(room)
 							delete(h.rooms, room.ID)
 						}
 					}
@@ -1098,6 +1175,7 @@ func (h *Hub) StartCleanupSweep(interval time.Duration) {
 					continue
 				}
 				if room.FinishedAt != nil && now.Sub(*room.FinishedAt) > 15*time.Second {
+					h.cleanupBotSessionsLocked(room)
 					delete(h.rooms, roomID)
 				}
 			}
@@ -1412,6 +1490,10 @@ func (h *Hub) runRoomCountdown(roomID string) {
 		RaceDurationMS: 90000,
 		Participants:   h.snapshotParticipantsForRoomLocked(room),
 	})
+
+	// Launch bot typing simulations for any injected bots.
+	h.launchBotSimulationsLocked(room)
+
 	h.mu.Unlock()
 
 	go h.raceTimeout(roomID, 90*time.Second)
@@ -1513,6 +1595,7 @@ func (h *Hub) resultsForRoomLocked(room *raceRoom) []RaceResult {
 			Errors:            session.Errors,
 			Finished:          session.FinishedAt != nil,
 			Suspicious:        session.SuspicionCount > 0,
+			IsBot:             session.IsBot,
 		}
 		if session.FinishedAt != nil {
 			result.FinishedElapsedMS = session.FinishedAt.Sub(room.RaceStartedAt).Milliseconds()
@@ -1549,7 +1632,15 @@ func (h *Hub) connectedParticipantsForRoomLocked(room *raceRoom) int {
 	count := 0
 	for _, token := range room.Participants {
 		session, ok := h.sessions[token]
-		if !ok || session.ClientID == "" {
+		if !ok {
+			continue
+		}
+		// Bots are always considered connected (no WebSocket).
+		if session.IsBot {
+			count++
+			continue
+		}
+		if session.ClientID == "" {
 			continue
 		}
 		count++
@@ -1610,6 +1701,7 @@ func (h *Hub) snapshotParticipantsForRoomLocked(room *raceRoom) []ParticipantSna
 			NetWPM:      session.NetWPM,
 			Accuracy:    session.Accuracy,
 			Finished:    session.FinishedAt != nil,
+			IsBot:       session.IsBot,
 		})
 	}
 
