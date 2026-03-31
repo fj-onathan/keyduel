@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import type { MyRaceItem } from '../../lib/api'
+import {useMemo, useState} from 'react'
+import type {MyRaceItem} from '../../lib/api'
 
 const PAGE_SIZE = 15
 
@@ -37,10 +37,10 @@ function resultClass(reason: string, position: number): string {
 }
 
 export function RaceHistorySection({
-  races,
-  total,
-  loading,
-}: {
+                                     races,
+                                     total,
+                                     loading,
+                                   }: {
   races: MyRaceItem[]
   total: number
   loading: boolean
@@ -64,7 +64,7 @@ export function RaceHistorySection({
     if (end - start + 1 < windowSize) {
       start = Math.max(1, end - windowSize + 1)
     }
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+    return Array.from({length: end - start + 1}, (_, i) => start + i)
   }, [tablePage, totalPages])
 
   if (loading) {

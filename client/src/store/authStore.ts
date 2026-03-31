@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { getMe, logout as apiLogout, setSessionExpiredHandler, type AuthUser, type AuthProfile } from '../lib/api'
+import {create} from 'zustand'
+import {type AuthProfile, type AuthUser, getMe, logout as apiLogout, setSessionExpiredHandler} from '../lib/api'
 
 type AuthState = {
   user: AuthUser | null
@@ -18,7 +18,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
 
   fetchMe: async () => {
-    set({ isLoading: true })
+    set({isLoading: true})
     try {
       const data = await getMe()
       set({

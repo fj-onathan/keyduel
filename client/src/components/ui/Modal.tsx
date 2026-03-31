@@ -1,11 +1,11 @@
-import { type ReactNode, useCallback, useEffect, useRef } from 'react'
+import {type ReactNode, useCallback, useEffect, useRef} from 'react'
 
 export function Modal({
-  open,
-  onClose,
-  title,
-  children,
-}: {
+                        open,
+                        onClose,
+                        title,
+                        children,
+                      }: {
   open: boolean
   onClose: () => void
   title: string

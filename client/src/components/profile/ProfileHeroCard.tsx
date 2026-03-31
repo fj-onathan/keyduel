@@ -1,15 +1,15 @@
-import type { ProfileOverviewResponse } from './types'
+import type {ProfileOverviewResponse} from './types'
 
 type Props = {
   profile: ProfileOverviewResponse
 }
 
-export function ProfileHeroCard({ profile }: Props) {
+export function ProfileHeroCard({profile}: Props) {
   const avatarLetter = profile.identity.displayName?.[0]?.toUpperCase() ?? profile.identity.username?.[0]?.toUpperCase() ?? 'P'
   const joined = new Date(profile.identity.joinedAt)
   const joinedLabel = Number.isNaN(joined.getTime())
     ? 'Unknown'
-    : joined.toLocaleDateString(undefined, { month: 'short', year: 'numeric' })
+    : joined.toLocaleDateString(undefined, {month: 'short', year: 'numeric'})
 
   return (
     <article className="profile-panel profile-top-card">
@@ -30,7 +30,8 @@ export function ProfileHeroCard({ profile }: Props) {
         )}
       </div>
 
-      <h2 className="profile-hero-title mt-0 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">
+      <h2
+        className="profile-hero-title mt-0 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">
         {profile.identity.displayName}
       </h2>
 
@@ -56,7 +57,8 @@ export function ProfileHeroCard({ profile }: Props) {
           <span className="profile-hero-meta-tag text-[0.6rem] sm:text-[0.68rem]">{profile.identity.websiteUrl}</span>
         ) : null}
         {profile.identity.countryCode ? (
-          <span className="profile-hero-meta-tag text-[0.6rem] sm:text-[0.68rem]">{profile.identity.countryCode.toUpperCase()}</span>
+          <span
+            className="profile-hero-meta-tag text-[0.6rem] sm:text-[0.68rem]">{profile.identity.countryCode.toUpperCase()}</span>
         ) : null}
       </div>
     </article>

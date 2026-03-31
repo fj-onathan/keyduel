@@ -1,4 +1,4 @@
-import { env } from '../config/env'
+import {env} from '../config/env'
 
 // Session expiry handler — called when any API request receives a 401.
 // This is set by the auth store to clear auth state without creating
@@ -202,5 +202,5 @@ export function getMyAccount(): Promise<MyAccountResponse> {
 }
 
 export function deleteMyAccount(): Promise<{ message: string }> {
-  return apiDelete<{ message: string }>('/api/me/account', { confirm: 'DELETE' })
+  return apiDelete<{ message: string }>('/api/me/account', {confirm: 'DELETE'})
 }

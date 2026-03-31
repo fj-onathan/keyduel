@@ -1,24 +1,20 @@
-import { useEffect, useState } from 'react'
-import { ProfileAchievements } from '../components/profile/ProfileAchievements'
-import { ProfileCurriculum } from '../components/profile/ProfileCurriculum'
-import { ProfileHeatmap } from '../components/profile/ProfileHeatmap'
-import { ProfileHeroCard } from '../components/profile/ProfileHeroCard'
-import { ProfileKeyDuelSummary } from '../components/profile/ProfileKeyDuelSummary'
-import {
-  demoProfileAchievements,
-  demoProfileActivity,
-  demoProfileOverview,
-} from '../components/profile/demoProfileData'
+import {useEffect, useState} from 'react'
+import {ProfileAchievements} from '../components/profile/ProfileAchievements'
+import {ProfileCurriculum} from '../components/profile/ProfileCurriculum'
+import {ProfileHeatmap} from '../components/profile/ProfileHeatmap'
+import {ProfileHeroCard} from '../components/profile/ProfileHeroCard'
+import {ProfileKeyDuelSummary} from '../components/profile/ProfileKeyDuelSummary'
+import {demoProfileAchievements, demoProfileActivity, demoProfileOverview,} from '../components/profile/demoProfileData'
 import type {
   ProfileAchievementsResponse,
   ProfileActivityResponse,
   ProfileOverviewResponse,
 } from '../components/profile/types'
-import { apiGet } from '../lib/api'
-import { useParams } from 'react-router-dom'
+import {apiGet} from '../lib/api'
+import {useParams} from 'react-router-dom'
 
 export function ProfilePage() {
-  const { username: routeUsername } = useParams<{ username: string }>()
+  const {username: routeUsername} = useParams<{ username: string }>()
   const [username, setUsername] = useState('client-1')
   const [profile, setProfile] = useState<ProfileOverviewResponse | null>(null)
   const [activity, setActivity] = useState<ProfileActivityResponse | null>(null)
@@ -96,16 +92,16 @@ export function ProfilePage() {
 
       {!loading && !error && profile ? (
         <section className="mt-4 sm:mt-5 grid gap-3 sm:gap-4 lg:gap-5 grid-cols-1">
-          <ProfileHeroCard profile={profile} />
+          <ProfileHeroCard profile={profile}/>
 
-          {activity ? <ProfileHeatmap activity={activity} /> : null}
+          {activity ? <ProfileHeatmap activity={activity}/> : null}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            <ProfileAchievements items={achievements} />
-            <ProfileKeyDuelSummary summary={profile.summary} />
+            <ProfileAchievements items={achievements}/>
+            <ProfileKeyDuelSummary summary={profile.summary}/>
           </div>
 
-          <ProfileCurriculum curriculum={profile.curriculum} />
+          <ProfileCurriculum curriculum={profile.curriculum}/>
         </section>
       ) : null}
     </main>

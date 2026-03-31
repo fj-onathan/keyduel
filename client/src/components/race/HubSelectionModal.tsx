@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { apiGet } from '../../lib/api'
-import { Modal } from '../ui/Modal'
+import {useCallback, useEffect, useMemo, useState} from 'react'
+import {apiGet} from '../../lib/api'
+import {Modal} from '../ui/Modal'
 
 type HubItem = {
   id: string
@@ -25,10 +25,10 @@ type HubsResponse = {
 }
 
 export function HubSelectionModal({
-  open,
-  onClose,
-  onSelect,
-}: {
+                                    open,
+                                    onClose,
+                                    onSelect,
+                                  }: {
   open: boolean
   onClose: () => void
   onSelect: (hub: HubItem) => void
@@ -49,7 +49,7 @@ export function HubSelectionModal({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setError('')
 
-    void apiGet<HubsResponse>('/hubs?activeOnly=true', { signal: controller.signal })
+    void apiGet<HubsResponse>('/hubs?activeOnly=true', {signal: controller.signal})
       .then((payload) => {
         setHubs(payload.items)
       })
@@ -102,7 +102,7 @@ export function HubSelectionModal({
 
       {loading ? (
         <div className="hub-modal-loading">
-          <span className="hub-modal-spinner" />
+          <span className="hub-modal-spinner"/>
           Loading hubs...
         </div>
       ) : null}

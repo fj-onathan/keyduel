@@ -1,23 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <defs>
-    <linearGradient id="orbBg" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#FFD8A8" />
-      <stop offset="0.42" stop-color="#FFAB5A" />
-      <stop offset="1" stop-color="#FF7A1A" />
-    </linearGradient>
-  </defs>
-  <rect x="6" y="6" width="52" height="52" rx="14" fill="url(#orbBg)" />
-  <rect x="12" y="12" width="40" height="40" rx="11" stroke="#FFE6C7" stroke-opacity="0.72" />
-  <path
-    d="M27.2 24.4C24.7 24.4 22.7 26.4 22.7 28.9V35.1C22.7 37.6 24.7 39.6 27.2 39.6"
-    stroke="#A5540E"
-    stroke-width="3.2"
-    stroke-linecap="round"
-  />
-  <path
-    d="M36.8 24.4C39.3 24.4 41.3 26.4 41.3 28.9V35.1C41.3 37.6 39.3 39.6 36.8 39.6"
-    stroke="#A5540E"
-    stroke-width="3.2"
-    stroke-linecap="round"
-  />
+    <defs>
+        <linearGradient id="orbBg" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#FFD8A8"/>
+            <stop offset="0.42" stop-color="#FFAB5A"/>
+            <stop offset="1" stop-color="#FF7A1A"/>
+        </linearGradient>
+    </defs>
+    <rect x="6" y="6" width="52" height="52" rx="14" fill="url(#orbBg)"/>
+    <rect x="12" y="12" width="40" height="40" rx="11" stroke="#FFE6C7" stroke-opacity="0.72"/>
+    <path
+            d="M27.2 24.4C24.7 24.4 22.7 26.4 22.7 28.9V35.1C22.7 37.6 24.7 39.6 27.2 39.6"
+            stroke="#A5540E"
+            stroke-width="3.2"
+            stroke-linecap="round"
+    />
+    <path
+            d="M36.8 24.4C39.3 24.4 41.3 26.4 41.3 28.9V35.1C41.3 37.6 39.3 39.6 36.8 39.6"
+            stroke="#A5540E"
+            stroke-width="3.2"
+            stroke-linecap="round"
+    />
 </svg>

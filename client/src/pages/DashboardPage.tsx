@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { DeleteAccountModal } from "../components/dashboard/DeleteAccountModal";
-import { HubStatsSection } from "../components/dashboard/HubStatsSection";
-import { PrivacyAccountSection } from "../components/dashboard/PrivacyAccountSection";
-import { RaceHistorySection } from "../components/dashboard/RaceHistorySection";
+import {useCallback, useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {DeleteAccountModal} from "../components/dashboard/DeleteAccountModal";
+import {HubStatsSection} from "../components/dashboard/HubStatsSection";
+import {PrivacyAccountSection} from "../components/dashboard/PrivacyAccountSection";
+import {RaceHistorySection} from "../components/dashboard/RaceHistorySection";
 import {
   deleteMyAccount,
   getMyAccount,
@@ -13,15 +13,15 @@ import {
   type MyAccountResponse,
   type MyRaceItem,
 } from "../lib/api";
-import { useAuthStore } from "../store/authStore";
-import { useToastStore } from "../store/toastStore";
+import {useAuthStore} from "../store/authStore";
+import {useToastStore} from "../store/toastStore";
 
 type Tab = "races" | "hubs" | "account";
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: "races", label: "Race History" },
-  { id: "hubs", label: "Hub Stats" },
-  { id: "account", label: "Privacy & Account" },
+  {id: "races", label: "Race History"},
+  {id: "hubs", label: "Hub Stats"},
+  {id: "account", label: "Privacy & Account"},
 ];
 
 export function DashboardPage() {
@@ -56,7 +56,7 @@ export function DashboardPage() {
     const controller = new AbortController();
 
     setRacesLoading(true);
-    getMyRaces({ limit: 200 })
+    getMyRaces({limit: 200})
       .then((res) => {
         if (controller.signal.aborted) return;
         setRaces(res.items);
@@ -191,7 +191,7 @@ export function DashboardPage() {
           ) : null}
 
           {activeTab === "hubs" ? (
-            <HubStatsSection stats={hubStats} loading={hubsLoading} />
+            <HubStatsSection stats={hubStats} loading={hubsLoading}/>
           ) : null}
 
           {activeTab === "account" ? (

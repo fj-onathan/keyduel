@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { RaceEditorPanel } from '../components/race/RaceEditorPanel'
-import { RaceResults } from '../components/race/RaceResults'
-import { RaceStandings } from '../components/race/RaceStandings'
-import { env } from '../config/env'
-import type { ParticipantSnapshot, RaceResult } from '../types/race'
+import {useEffect, useMemo, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import {RaceEditorPanel} from '../components/race/RaceEditorPanel'
+import {RaceResults} from '../components/race/RaceResults'
+import {RaceStandings} from '../components/race/RaceStandings'
+import {env} from '../config/env'
+import type {ParticipantSnapshot, RaceResult} from '../types/race'
 
 type RaceDetailResponse = {
   raceId: string
@@ -77,7 +77,7 @@ function formatDate(iso: string): string {
 }
 
 export function RaceReplayPage() {
-  const { raceId } = useParams<{ hub: string; raceId: string }>()
+  const {raceId} = useParams<{ hub: string; raceId: string }>()
   const navigate = useNavigate()
   const [data, setData] = useState<RaceDetailResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -203,15 +203,15 @@ export function RaceReplayPage() {
           <div className="race-header-chips">
             <div className="race-chips-status">
               <span className="race-chip race-chip-room">
-                <span className="race-chip-dot" />
+                <span className="race-chip-dot"/>
                 Race {data.raceId.slice(0, 8)}
               </span>
               <span className="race-chip race-chip-phase is-finished">
-                <span className="race-chip-dot" />
+                <span className="race-chip-dot"/>
                 Finished
               </span>
               <span className="race-chip race-chip-replay">
-                <span className="race-chip-dot" />
+                <span className="race-chip-dot"/>
                 Replay
               </span>
             </div>
@@ -263,7 +263,8 @@ export function RaceReplayPage() {
           difficulty={data.difficulty}
           timeRemainingSeconds={0}
           isLowTime={false}
-          onType={() => {}}
+          onType={() => {
+          }}
         />
         <RaceStandings
           participants={participants}
@@ -273,7 +274,7 @@ export function RaceReplayPage() {
         />
       </div>
 
-      <RaceResults results={results} />
+      <RaceResults results={results}/>
     </main>
   )
 }

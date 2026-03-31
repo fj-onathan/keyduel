@@ -105,10 +105,60 @@ export const demoProfileActivity: ProfileActivityResponse = {
 export const demoProfileAchievements: ProfileAchievementsResponse = {
   username: 'demo',
   items: [
-    { id: 'go-2026-02', hub: 'go', hubTitle: 'Go Hub', periodLabel: 'Feb 2026', rank: 1, metricType: 'wins', metricValue: 64, wins: 64, badgeType: 'leader' },
-    { id: 'rust-2026-01', hub: 'rust', hubTitle: 'Rust Hub', periodLabel: 'Jan 2026', rank: 2, metricType: 'wins', metricValue: 51, wins: 51, badgeType: 'top3' },
-    { id: 'typescript-2025-12', hub: 'typescript', hubTitle: 'TypeScript Hub', periodLabel: 'Dec 2025', rank: 1, metricType: 'speed', metricValue: 121.4, wins: 46, badgeType: 'leader' },
-    { id: 'python-2025-11', hub: 'python', hubTitle: 'Python Hub', periodLabel: 'Nov 2025', rank: 3, metricType: 'wins', metricValue: 42, wins: 42, badgeType: 'top3' },
-    { id: 'javascript-2025-10', hub: 'javascript', hubTitle: 'JavaScript Hub', periodLabel: 'Oct 2025', rank: 7, metricType: 'accuracy', metricValue: 99.1, wins: 24, badgeType: 'top10' },
+    {
+      id: 'go-2026-02',
+      hub: 'go',
+      hubTitle: 'Go Hub',
+      periodLabel: 'Feb 2026',
+      rank: 1,
+      metricType: 'wins',
+      metricValue: 64,
+      wins: 64,
+      badgeType: 'leader'
+    },
+    {
+      id: 'rust-2026-01',
+      hub: 'rust',
+      hubTitle: 'Rust Hub',
+      periodLabel: 'Jan 2026',
+      rank: 2,
+      metricType: 'wins',
+      metricValue: 51,
+      wins: 51,
+      badgeType: 'top3'
+    },
+    {
+      id: 'typescript-2025-12',
+      hub: 'typescript',
+      hubTitle: 'TypeScript Hub',
+      periodLabel: 'Dec 2025',
+      rank: 1,
+      metricType: 'speed',
+      metricValue: 121.4,
+      wins: 46,
+      badgeType: 'leader'
+    },
+    {
+      id: 'python-2025-11',
+      hub: 'python',
+      hubTitle: 'Python Hub',
+      periodLabel: 'Nov 2025',
+      rank: 3,
+      metricType: 'wins',
+      metricValue: 42,
+      wins: 42,
+      badgeType: 'top3'
+    },
+    {
+      id: 'javascript-2025-10',
+      hub: 'javascript',
+      hubTitle: 'JavaScript Hub',
+      periodLabel: 'Oct 2025',
+      rank: 7,
+      metricType: 'accuracy',
+      metricValue: 99.1,
+      wins: 24,
+      badgeType: 'top10'
+    },
   ],
 }

@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import type { ProfileActivityCell, ProfileActivityResponse } from './types'
+import {useMemo} from 'react'
+import type {ProfileActivityCell, ProfileActivityResponse} from './types'
 
 type Props = {
   activity: ProfileActivityResponse
@@ -13,7 +13,7 @@ function heatClass(count: number): string {
   return 'heat-4'
 }
 
-export function ProfileHeatmap({ activity }: Props) {
+export function ProfileHeatmap({activity}: Props) {
   const weeks = useMemo(() => {
     const chunks: ProfileActivityCell[][] = []
     for (let index = 0; index < activity.cells.length; index += 7) {
@@ -26,7 +26,8 @@ export function ProfileHeatmap({ activity }: Props) {
     <article className="profile-panel profile-main-card">
       <h3 className="profile-panel-title text-sm sm:text-base">Contribution Activity ({activity.range})</h3>
       <p className="profile-panel-subtitle text-xs sm:text-sm">
-        Active days: {activity.totals.activeDays} • Total races: {activity.totals.totalRaces} • Current streak: {activity.totals.currentStreak}
+        Active days: {activity.totals.activeDays} • Total races: {activity.totals.totalRaces} • Current
+        streak: {activity.totals.currentStreak}
       </p>
 
       <div className="relative mt-2 sm:mt-3">
@@ -46,7 +47,8 @@ export function ProfileHeatmap({ activity }: Props) {
           ))}
         </div>
         {/* Scroll fade hint for small screens */}
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-[rgba(13,10,9,0.8)] to-transparent sm:hidden rounded-r-xl" />
+        <div
+          className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-[rgba(13,10,9,0.8)] to-transparent sm:hidden rounded-r-xl"/>
       </div>
     </article>
   )

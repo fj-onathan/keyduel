@@ -1,6 +1,15 @@
-import { memo, useEffect, useMemo, useRef, useState, type ChangeEvent, type ClipboardEvent, type KeyboardEvent } from 'react'
-import { playCountdownTick, playGoBeep, playKeystrokeClick } from '../../lib/sounds'
-import { useUIStore } from '../../store/uiStore'
+import {
+  type ChangeEvent,
+  type ClipboardEvent,
+  type KeyboardEvent,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
+import {playCountdownTick, playGoBeep, playKeystrokeClick} from '../../lib/sounds'
+import {useUIStore} from '../../store/uiStore'
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60)
@@ -40,10 +49,19 @@ const syntaxKeywords = new Set([
   'var',
 ])
 
-type SyntaxToken = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'type' | 'function' | 'operator' | 'punctuation'
+type SyntaxToken =
+  'plain'
+  | 'keyword'
+  | 'string'
+  | 'number'
+  | 'comment'
+  | 'type'
+  | 'function'
+  | 'operator'
+  | 'punctuation'
 
 function buildSyntaxMap(snippet: string) {
-  const map: SyntaxToken[] = Array.from({ length: snippet.length }, () => 'plain')
+  const map: SyntaxToken[] = Array.from({length: snippet.length}, () => 'plain')
   let i = 0
 
   while (i < snippet.length) {
@@ -146,21 +164,21 @@ function toLineCol(snippet: string, index: number) {
     }
   }
 
-  return { line, col }
+  return {line, col}
 }
 
 export const RaceEditorPanel = memo(function RaceEditorPanel({
-  snippet,
-  typed,
-  countdown,
-  progressPercent,
-  phase,
-  difficulty,
-  avgTime,
-  timeRemainingSeconds,
-  isLowTime,
-  onType,
-}: {
+                                                               snippet,
+                                                               typed,
+                                                               countdown,
+                                                               progressPercent,
+                                                               phase,
+                                                               difficulty,
+                                                               avgTime,
+                                                               timeRemainingSeconds,
+                                                               isLowTime,
+                                                               onType,
+                                                             }: {
   snippet: string
   typed: string
   countdown: number
@@ -396,7 +414,8 @@ export const RaceEditorPanel = memo(function RaceEditorPanel({
       <div className="race-editor-info">
         {difficulty != null && difficulty > 0 ? (
           <span className="race-editor-info-chip" title="Difficulty level">
-            {'|'.repeat(difficulty)}{'|'.repeat(Math.max(0, 5 - difficulty)).split('').map((_, i) => <span key={i} style={{ opacity: 0.25 }}>|</span>)}
+            {'|'.repeat(difficulty)}{'|'.repeat(Math.max(0, 5 - difficulty)).split('').map((_, i) => <span key={i}
+                                                                                                           style={{opacity: 0.25}}>|</span>)}
             {' '}Lvl {difficulty}
           </span>
         ) : null}
@@ -407,7 +426,7 @@ export const RaceEditorPanel = memo(function RaceEditorPanel({
       </div>
 
       <div className="race-progress-track" aria-hidden="true">
-        <div style={{ width: `${progressPercent}%` }} />
+        <div style={{width: `${progressPercent}%`}}/>
       </div>
 
       <div className="race-editor-metrics" aria-label="Race typing metrics">
@@ -441,29 +460,29 @@ export const RaceEditorPanel = memo(function RaceEditorPanel({
         ) : null}
 
         {!snippetHidden ? (
-        <div
-          className={`race-type-phrase${showGo ? ' race-snippet-reveal' : ''}`}
-          style={{
-            filter: focused ? 'blur(0)' : 'blur(2px)',
-            opacity: focused && isActive ? 1 : 0.62,
-          }}
-          ref={phraseRef}
-        >
-          {lines.map((line) => (
-            <div key={line.key} className="race-type-line-row">
-              <span className="race-type-line-number">{line.lineNumber}</span>
-              <span className="race-type-line-code">
+          <div
+            className={`race-type-phrase${showGo ? ' race-snippet-reveal' : ''}`}
+            style={{
+              filter: focused ? 'blur(0)' : 'blur(2px)',
+              opacity: focused && isActive ? 1 : 0.62,
+            }}
+            ref={phraseRef}
+          >
+            {lines.map((line) => (
+              <div key={line.key} className="race-type-line-row">
+                <span className="race-type-line-number">{line.lineNumber}</span>
+                <span className="race-type-line-code">
                 {line.chars.map((char) => (
                   <span
                     key={char.key}
                     className={`${char.className}${char.isCurrent && cursorPulsing && focused && isActive ? ' is-blink' : ''}`}
                   >{char.value}</span>
                 ))}
-                {line.hasLineBreak ? <span className="race-line-break-glyph">↵</span> : null}
+                  {line.hasLineBreak ? <span className="race-line-break-glyph">↵</span> : null}
               </span>
-            </div>
-          ))}
-        </div>
+              </div>
+            ))}
+          </div>
         ) : null}
 
         {!focused && !snippetHidden ? <div className="race-type-refocus">Click or press any key to focus</div> : null}

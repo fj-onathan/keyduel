@@ -77,15 +77,19 @@ export function HeroRaceWindow() {
       className="animate-in a6 mt-10 w-full overflow-hidden rounded-[16px] border border-white/10 bg-[linear-gradient(180deg,rgba(22,15,11,0.94),rgba(9,7,6,0.98))] sm:rounded-[24px]"
       aria-label="Race preview window"
     >
-      <div className="relative flex items-center justify-end gap-2 border-b border-white/10 bg-[linear-gradient(90deg,rgba(25,17,12,0.9),rgba(18,12,9,0.9))] px-3 py-2 sm:gap-3 sm:px-4 sm:py-2.5">
-        <p className="pointer-events-none absolute left-1/2 m-0 -translate-x-1/2 text-center text-[0.6rem] tracking-[0.08em] text-[#ceb49b] sm:text-[0.7rem]">
+      <div
+        className="relative flex items-center justify-end gap-2 border-b border-white/10 bg-[linear-gradient(90deg,rgba(25,17,12,0.9),rgba(18,12,9,0.9))] px-3 py-2 sm:gap-3 sm:px-4 sm:py-2.5">
+        <p
+          className="pointer-events-none absolute left-1/2 m-0 -translate-x-1/2 text-center text-[0.6rem] tracking-[0.08em] text-[#ceb49b] sm:text-[0.7rem]">
           race://sprint-go-2p
         </p>
         <div className="flex items-center gap-1.5">
-          <span className="rounded-full border border-white/20 bg-white/8 px-2 py-0.5 text-[0.62rem] font-semibold tracking-[0.08em] text-[#d9dde4]">
+          <span
+            className="rounded-full border border-white/20 bg-white/8 px-2 py-0.5 text-[0.62rem] font-semibold tracking-[0.08em] text-[#d9dde4]">
             HUB: GO
           </span>
-          <span className="rounded-full border border-white/20 bg-white/8 px-2 py-0.5 text-[0.62rem] font-semibold tracking-[0.08em] live-pill text-[#2b1300]">LIVE</span>
+          <span
+            className="rounded-full border border-white/20 bg-white/8 px-2 py-0.5 text-[0.62rem] font-semibold tracking-[0.08em] live-pill text-[#2b1300]">LIVE</span>
         </div>
       </div>
 
@@ -96,14 +100,16 @@ export function HeroRaceWindow() {
             <span className="text-[0.62rem] uppercase tracking-[0.1em] text-[#aa9a8b]">difficulty: mid</span>
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0f0b09]/85 px-2 py-2 text-left sm:px-3 sm:py-2.5">
-            <div className="editor-grid grid grid-cols-[auto_1fr] gap-x-2 font-mono text-[0.72rem] leading-[1.72] text-[#efdfd0] text-left sm:gap-x-4 sm:text-[0.96rem]">
+          <div
+            className="overflow-x-auto rounded-lg border border-white/10 bg-[#0f0b09]/85 px-2 py-2 text-left sm:px-3 sm:py-2.5">
+            <div
+              className="editor-grid grid grid-cols-[auto_1fr] gap-x-2 font-mono text-[0.72rem] leading-[1.72] text-[#efdfd0] text-left sm:gap-x-4 sm:text-[0.96rem]">
               <span className="text-right text-[#7f7267]">1</span>
               <span>
                 <span className="text-[#ffb966]">package</span> main
               </span>
               <span className="text-right text-[#7f7267]">2</span>
-              <span />
+              <span/>
               <span className="text-right text-[#7f7267]">3</span>
               <span>
                 <span className="text-[#ffb966]">import</span> (
@@ -119,24 +125,27 @@ export function HeroRaceWindow() {
               <span className="text-right text-[#7f7267]">6</span>
               <span>)</span>
               <span className="text-right text-[#7f7267]">7</span>
-              <span />
+              <span/>
               <span className="text-right text-[#7f7267]">8</span>
               <span>
                 <span className="text-[#ffb966]">func</span> <span className="text-[#ffe7cc]">main</span>() {'{'}
               </span>
               <span className="text-right text-[#7f7267]">9</span>
               <span>
-                {'  '}tasks := []<span className="text-[#ffc787]">string</span>{'{'}<span className="text-[#ffcf94]">"build"</span>, <span className="text-[#ffcf94]">"test"</span>, <span className="text-[#ffcf94]">"deploy"</span>{'}'}
+                {'  '}tasks := []<span className="text-[#ffc787]">string</span>{'{'}<span
+                className="text-[#ffcf94]">"build"</span>, <span className="text-[#ffcf94]">"test"</span>, <span
+                className="text-[#ffcf94]">"deploy"</span>{'}'}
               </span>
               <span className="text-right text-[#7f7267]">10</span>
-              <span />
+              <span/>
               <span className="text-right text-[#7f7267]">11</span>
               <span>
                 {'  '}start := time.<span className="text-[#ffe7cc]">Now</span>()
               </span>
               <span className="text-right text-[#7f7267]">12</span>
               <span>
-                {'  '}<span className="text-[#ffb966]">for</span> i, t := <span className="text-[#ffb966]">range</span> tasks {'{'}
+                {'  '}<span className="text-[#ffb966]">for</span> i, t := <span
+                className="text-[#ffb966]">range</span> tasks {'{'}
               </span>
               <span className="text-right text-[#7f7267]">13</span>
               <span>
@@ -149,15 +158,17 @@ export function HeroRaceWindow() {
               <span className="text-right text-[#7f7267]">15</span>
               <span>{'  }'}</span>
               <span className="text-right text-[#7f7267]">16</span>
-              <span />
+              <span/>
               <span className="text-right text-[#7f7267]">17</span>
               <span>
-                {'  '}fmt.<span className="text-[#ffe7cc]">Printf</span>(<span className="text-[#ffcf94]">"Pipeline finished in %v\\n"</span>, time.<span className="text-[#ffe7cc]">Since</span>(start))
+                {'  '}fmt.<span className="text-[#ffe7cc]">Printf</span>(<span className="text-[#ffcf94]">"Pipeline finished in %v\\n"</span>, time.<span
+                className="text-[#ffe7cc]">Since</span>(start))
               </span>
               <span className="text-right text-[#7f7267]">18</span>
               <span>{'}'}</span>
             </div>
-            <div className="mt-2 flex items-center justify-between border-t border-white/10 pt-2 text-[0.62rem] uppercase tracking-[0.08em] text-[#8d7f72]">
+            <div
+              className="mt-2 flex items-center justify-between border-t border-white/10 pt-2 text-[0.62rem] uppercase tracking-[0.08em] text-[#8d7f72]">
               <span>utf-8</span>
               <span>go</span>
               <span>line 18, col 1</span>
@@ -198,7 +209,8 @@ export function HeroRaceWindow() {
                   )}
                   <span className="truncate">{player.name}</span>
                   {player.isGuest ? (
-                    <em className="rounded-full border border-white/16 px-1.5 py-0.5 text-[0.58rem] uppercase tracking-[0.08em] text-[#d7d9dd]">
+                    <em
+                      className="rounded-full border border-white/16 px-1.5 py-0.5 text-[0.58rem] uppercase tracking-[0.08em] text-[#d7d9dd]">
                       guest
                     </em>
                   ) : null}
@@ -208,7 +220,7 @@ export function HeroRaceWindow() {
                 </span>
               </div>
               <div className="lane-track">
-                <div className={`lane-progress ${player.laneClass}`} style={{ width: player.progress }} />
+                <div className={`lane-progress ${player.laneClass}`} style={{width: player.progress}}/>
               </div>
               <div className="mt-1 hidden gap-2 text-[0.62rem] text-[#9c8d80] sm:flex">
                 <span>avg {player.avg}</span>

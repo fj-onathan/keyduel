@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Button } from '../components/ui/Button'
-import { apiGet } from '../lib/api'
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {Link, useNavigate, useParams} from 'react-router-dom'
+import {Button} from '../components/ui/Button'
+import {apiGet} from '../lib/api'
 
 type LeaderboardEntry = {
   userId: string
@@ -97,10 +97,10 @@ const TARGET_RANKS = [10, 25, 50, 100]
 const PREFERRED_USERNAME = 'client-1'
 const LEADERBOARD_PAGE_SIZE = 15
 const REWARD_TIERS: RewardTier[] = [
-  { id: 'top10', label: 'Top 10', threshold: 10, reward: 'Champion crest + animated frame', icon: 'CR' },
-  { id: 'top25', label: 'Top 25', threshold: 25, reward: 'Elite banner + profile glow', icon: 'BN' },
-  { id: 'top50', label: 'Top 50', threshold: 50, reward: 'Contender banner for next season', icon: 'CT' },
-  { id: 'top100', label: 'Top 100', threshold: 100, reward: 'Seasonal mark + streak boost', icon: 'MK' },
+  {id: 'top10', label: 'Top 10', threshold: 10, reward: 'Champion crest + animated frame', icon: 'CR'},
+  {id: 'top25', label: 'Top 25', threshold: 25, reward: 'Elite banner + profile glow', icon: 'BN'},
+  {id: 'top50', label: 'Top 50', threshold: 50, reward: 'Contender banner for next season', icon: 'CT'},
+  {id: 'top100', label: 'Top 100', threshold: 100, reward: 'Seasonal mark + streak boost', icon: 'MK'},
 ]
 
 function seededDelta(seed: string): number {
@@ -156,7 +156,7 @@ function isFriendCandidate(username: string): boolean {
   for (let i = 0; i < username.length; i += 1) {
     hash = (hash * 37 + username.charCodeAt(i)) | 0
   }
-  return Math.abs(hash)%3 === 0
+  return Math.abs(hash) % 3 === 0
 }
 
 function seasonCountdown(): string {
@@ -191,7 +191,7 @@ function buildMockPayload(metric: 'speed' | 'accuracy' | 'wins', timeframe: Time
     'glide_input', 'zen_keys', 'focus_hunt', 'cartridge', 'quick_mantis', 'updraft', 'proto_shot', 'delta_lane',
   ]
 
-  const items: LeaderboardEntry[] = Array.from({ length: 60 }, (_, index) => {
+  const items: LeaderboardEntry[] = Array.from({length: 60}, (_, index) => {
     const rank = index + 1
     const username = names[index % names.length] + (index >= names.length ? `_${Math.floor(index / names.length)}` : '')
     const rankDelta = ((index * 7) % 9) - 3
@@ -211,16 +211,16 @@ function buildMockPayload(metric: 'speed' | 'accuracy' | 'wins', timeframe: Time
 
   const hubs: HubsResponse = {
     items: [
-      { id: 'go', slug: 'go', title: 'Go Hub', activePlayers: 118, racesToday: 412 },
-      { id: 'ts', slug: 'typescript', title: 'TypeScript Hub', activePlayers: 95, racesToday: 336 },
-      { id: 'py', slug: 'python', title: 'Python Hub', activePlayers: 88, racesToday: 298 },
-      { id: 'rs', slug: 'rust', title: 'Rust Hub', activePlayers: 61, racesToday: 207 },
-      { id: 'java', slug: 'java', title: 'Java Hub', activePlayers: 47, racesToday: 164 },
-      { id: 'cpp', slug: 'cpp', title: 'C++ Hub', activePlayers: 39, racesToday: 128 },
-      { id: 'swift', slug: 'swift', title: 'Swift Hub', activePlayers: 31, racesToday: 106 },
-      { id: 'php', slug: 'php', title: 'PHP Hub', activePlayers: 24, racesToday: 84 },
-      { id: 'kotlin', slug: 'kotlin', title: 'Kotlin Hub', activePlayers: 18, racesToday: 68 },
-      { id: 'ruby', slug: 'ruby', title: 'Ruby Hub', activePlayers: 14, racesToday: 52 },
+      {id: 'go', slug: 'go', title: 'Go Hub', activePlayers: 118, racesToday: 412},
+      {id: 'ts', slug: 'typescript', title: 'TypeScript Hub', activePlayers: 95, racesToday: 336},
+      {id: 'py', slug: 'python', title: 'Python Hub', activePlayers: 88, racesToday: 298},
+      {id: 'rs', slug: 'rust', title: 'Rust Hub', activePlayers: 61, racesToday: 207},
+      {id: 'java', slug: 'java', title: 'Java Hub', activePlayers: 47, racesToday: 164},
+      {id: 'cpp', slug: 'cpp', title: 'C++ Hub', activePlayers: 39, racesToday: 128},
+      {id: 'swift', slug: 'swift', title: 'Swift Hub', activePlayers: 31, racesToday: 106},
+      {id: 'php', slug: 'php', title: 'PHP Hub', activePlayers: 24, racesToday: 84},
+      {id: 'kotlin', slug: 'kotlin', title: 'Kotlin Hub', activePlayers: 18, racesToday: 68},
+      {id: 'ruby', slug: 'ruby', title: 'Ruby Hub', activePlayers: 14, racesToday: 52},
     ],
   }
 
@@ -228,7 +228,7 @@ function buildMockPayload(metric: 'speed' | 'accuracy' | 'wins', timeframe: Time
   const racesTrend = (timeframe === 'weekly'
     ? ['2026-03-11', '2026-03-12', '2026-03-13', '2026-03-14', '2026-03-15', '2026-03-16', '2026-03-17']
     : ['2026-W02', '2026-W03', '2026-W04', '2026-W05', '2026-W06', '2026-W07', '2026-W08'])
-    .map((bucket, idx) => ({ bucket, races: 95 + idx * 16 + ((idx % 2) * 9) }))
+    .map((bucket, idx) => ({bucket, races: 95 + idx * 16 + ((idx % 2) * 9)}))
 
   const community: NonNullable<LeaderboardResponse['community']> = {
     mostPlayedHub: {
@@ -303,7 +303,7 @@ function chartPointCoords(values: number[], width: number, height: number): Arra
   return values.map((value, index) => {
     const x = values.length === 1 ? width / 2 : (index / (values.length - 1)) * width
     const y = height - (value / range) * height
-    return { x, y }
+    return {x, y}
   })
 }
 
@@ -344,7 +344,7 @@ function tierDeltaLabel(tier: 'Gold' | 'Silver' | 'Bronze', timeframe: Timeframe
 }
 
 export function LeaderboardPage() {
-  const { hubSlug } = useParams<{ hubSlug?: string }>()
+  const {hubSlug} = useParams<{ hubSlug?: string }>()
   const navigate = useNavigate()
   const [timeframe, setTimeframe] = useState<Timeframe>('weekly')
   const [metric, setMetric] = useState<'speed' | 'accuracy' | 'wins'>('speed')
@@ -392,12 +392,14 @@ export function LeaderboardPage() {
   // Close search dropdown on outside click
   useEffect(() => {
     if (!hubSearchOpen) return
+
     function onClickOutside(e: MouseEvent) {
       if (hubSearchRef.current && !hubSearchRef.current.contains(e.target as Node)) {
         setHubSearchOpen(false)
         setHubSearch('')
       }
     }
+
     document.addEventListener('mousedown', onClickOutside)
     return () => document.removeEventListener('mousedown', onClickOutside)
   }, [hubSearchOpen])
@@ -410,7 +412,7 @@ export function LeaderboardPage() {
     }
 
     const controller = new AbortController()
-    apiGet<HubsResponse>('/hubs?limit=200&offset=0&activeOnly=true', { signal: controller.signal })
+    apiGet<HubsResponse>('/hubs?limit=200&offset=0&activeOnly=true', {signal: controller.signal})
       .then((hubsPayload) => {
         if (!controller.signal.aborted) {
           setHubs(hubsPayload.items)
@@ -459,8 +461,8 @@ export function LeaderboardPage() {
     const hubParam = selectedHub !== 'all' ? `/${selectedHub}` : ''
 
     void Promise.all([
-      apiGet<LeaderboardResponse>(`/leaderboard${hubParam}?metric=${metric}&range=${timeframe}&limit=100&offset=0`, { signal: controller.signal }),
-      apiGet<SocialRivalsResponse>(`/social/rivals?metric=${metric}&range=${timeframe}&limit=5`, { signal: controller.signal }),
+      apiGet<LeaderboardResponse>(`/leaderboard${hubParam}?metric=${metric}&range=${timeframe}&limit=100&offset=0`, {signal: controller.signal}),
+      apiGet<SocialRivalsResponse>(`/social/rivals?metric=${metric}&range=${timeframe}&limit=5`, {signal: controller.signal}),
     ])
       .then(([leaderboardPayload, rivalsPayload]) => {
         if (controller.signal.aborted) {
@@ -556,7 +558,7 @@ export function LeaderboardPage() {
       return
     }
     const timer = window.setTimeout(() => {
-      currentRowRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+      currentRowRef.current?.scrollIntoView({block: 'nearest', behavior: 'smooth'})
     }, 180)
     return () => {
       window.clearTimeout(timer)
@@ -625,9 +627,9 @@ export function LeaderboardPage() {
   }, [stats.racesTrend])
   const tierRows = useMemo(
     () => [
-      { key: 'Gold', value: stats.avgWpmByTier?.gold ?? 0 },
-      { key: 'Silver', value: stats.avgWpmByTier?.silver ?? 0 },
-      { key: 'Bronze', value: stats.avgWpmByTier?.bronze ?? 0 },
+      {key: 'Gold', value: stats.avgWpmByTier?.gold ?? 0},
+      {key: 'Silver', value: stats.avgWpmByTier?.silver ?? 0},
+      {key: 'Bronze', value: stats.avgWpmByTier?.bronze ?? 0},
     ],
     [stats.avgWpmByTier],
   )
@@ -712,10 +714,10 @@ export function LeaderboardPage() {
     const windowSize = 5
     let start = Math.max(1, tablePage - Math.floor(windowSize / 2))
     const end = Math.min(totalTablePages, start + windowSize - 1)
-    if (end-start+1 < windowSize) {
+    if (end - start + 1 < windowSize) {
       start = Math.max(1, end - windowSize + 1)
     }
-    return Array.from({ length: end - start + 1 }, (_, index) => start + index)
+    return Array.from({length: end - start + 1}, (_, index) => start + index)
   }, [tablePage, totalTablePages])
 
   return (
@@ -734,19 +736,34 @@ export function LeaderboardPage() {
 
         <div className="leaderboard-stage-controls" role="tablist" aria-label="Leaderboard filters">
           <div className="leaderboard-stage-controls-left">
-            <Button className={timeframe === 'weekly' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'} onClick={() => { if (timeframe !== 'weekly') setTimeframe('weekly') }}>
+            <Button className={timeframe === 'weekly' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'}
+                    onClick={() => {
+                      if (timeframe !== 'weekly') setTimeframe('weekly')
+                    }}>
               Weekly Race
             </Button>
-            <Button className={timeframe === 'all-time' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'} onClick={() => { if (timeframe !== 'all-time') setTimeframe('all-time') }}>
+            <Button className={timeframe === 'all-time' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'}
+                    onClick={() => {
+                      if (timeframe !== 'all-time') setTimeframe('all-time')
+                    }}>
               All-Time Ladder
             </Button>
-            <Button className={metric === 'speed' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'} onClick={() => { if (metric !== 'speed') setMetric('speed') }}>
+            <Button className={metric === 'speed' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'}
+                    onClick={() => {
+                      if (metric !== 'speed') setMetric('speed')
+                    }}>
               Speed
             </Button>
-            <Button className={metric === 'accuracy' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'} onClick={() => { if (metric !== 'accuracy') setMetric('accuracy') }}>
+            <Button className={metric === 'accuracy' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'}
+                    onClick={() => {
+                      if (metric !== 'accuracy') setMetric('accuracy')
+                    }}>
               Accuracy
             </Button>
-            <Button className={metric === 'wins' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'} onClick={() => { if (metric !== 'wins') setMetric('wins') }}>
+            <Button className={metric === 'wins' ? 'leaderboard-stage-pill is-active' : 'leaderboard-stage-pill'}
+                    onClick={() => {
+                      if (metric !== 'wins') setMetric('wins')
+                    }}>
               Wins
             </Button>
           </div>
@@ -761,7 +778,8 @@ export function LeaderboardPage() {
             >
               <span className="leaderboard-hub-filter-label">Language</span>
               <span className="leaderboard-hub-filter-value">{activeHubTitle ?? 'All'}</span>
-              <span className="leaderboard-hub-filter-caret" aria-hidden="true">{hubSearchOpen ? '\u25B2' : '\u25BC'}</span>
+              <span className="leaderboard-hub-filter-caret"
+                    aria-hidden="true">{hubSearchOpen ? '\u25B2' : '\u25BC'}</span>
             </button>
             {hubSearchOpen ? (
               <div className="leaderboard-hub-popover">
@@ -827,13 +845,13 @@ export function LeaderboardPage() {
 
         {loading ? (
           <section className="leaderboard-stage-skeleton" aria-label="Loading leaderboard">
-            <div className="leaderboard-skeleton-block leaderboard-skeleton-header" />
+            <div className="leaderboard-skeleton-block leaderboard-skeleton-header"/>
             <div className="leaderboard-skeleton-grid">
-              <div className="leaderboard-skeleton-block leaderboard-skeleton-podium" />
-              <div className="leaderboard-skeleton-block leaderboard-skeleton-card" />
+              <div className="leaderboard-skeleton-block leaderboard-skeleton-podium"/>
+              <div className="leaderboard-skeleton-block leaderboard-skeleton-card"/>
             </div>
-            <div className="leaderboard-skeleton-block leaderboard-skeleton-rail" />
-            <div className="leaderboard-skeleton-block leaderboard-skeleton-table" />
+            <div className="leaderboard-skeleton-block leaderboard-skeleton-rail"/>
+            <div className="leaderboard-skeleton-block leaderboard-skeleton-table"/>
           </section>
         ) : null}
         {error ? (
@@ -872,12 +890,14 @@ export function LeaderboardPage() {
                   <article key={entry.userId} className={`leaderboard-podium-large-card rank-${entry.rank}`}>
                     <p>#{entry.rank}</p>
                     {entry.avatarUrl ? (
-                      <img src={entry.avatarUrl} alt={entry.username} className="leaderboard-podium-avatar" />
+                      <img src={entry.avatarUrl} alt={entry.username} className="leaderboard-podium-avatar"/>
                     ) : (
-                      <span className="leaderboard-podium-avatar-placeholder">{entry.username.charAt(0).toUpperCase()}</span>
+                      <span
+                        className="leaderboard-podium-avatar-placeholder">{entry.username.charAt(0).toUpperCase()}</span>
                     )}
                     <h2>@{entry.username}</h2>
-                    {entry.displayName ? <span className="leaderboard-podium-realname">{entry.displayName}</span> : null}
+                    {entry.displayName ?
+                      <span className="leaderboard-podium-realname">{entry.displayName}</span> : null}
                     <em>{podiumBadge(entry.rank)}</em>
                     <strong>{formatMetric(metric, entry.metricValue)}</strong>
                     <span>{entry.bestNetWpm.toFixed(1)} WPM | {entry.avgAccuracy.toFixed(1)}% acc</span>
@@ -890,7 +910,8 @@ export function LeaderboardPage() {
                   <p className="leaderboard-challenge-kicker">Your challenge</p>
                   <h2>#{currentUser.rank} right now</h2>
                   <div className="leaderboard-challenge-stats">
-                    <span className={currentUser.trend === 'up' ? 'is-up' : currentUser.trend === 'down' ? 'is-down' : 'is-flat'}>
+                    <span
+                      className={currentUser.trend === 'up' ? 'is-up' : currentUser.trend === 'down' ? 'is-down' : 'is-flat'}>
                       {trendIcon(currentUser.trend)} {currentUser.delta > 0 ? `+${currentUser.delta}` : currentUser.delta} today
                     </span>
                     <span>{formatMetric(metric, currentUser.metricValue)}</span>
@@ -907,7 +928,8 @@ export function LeaderboardPage() {
               <div>
                 {movementFeed.length > 0
                   ? movementFeed.map((item) => (
-                    <span key={item.id} className={item.trend === 'up' ? 'is-up' : item.trend === 'down' ? 'is-down' : 'is-flat'}>
+                    <span key={item.id}
+                          className={item.trend === 'up' ? 'is-up' : item.trend === 'down' ? 'is-down' : 'is-flat'}>
                       {trendIcon(item.trend)} {item.username} {item.delta > 0 ? `+${item.delta}` : item.delta} to #{item.rank}
                     </span>
                   ))
@@ -923,14 +945,16 @@ export function LeaderboardPage() {
               <div>
                 {friendsRows.length > 0 ? (
                   friendsRows.map((entry) => (
-                    <article key={entry.userId} className={currentUser?.userId === entry.userId ? 'is-current-user' : undefined}>
+                    <article key={entry.userId}
+                             className={currentUser?.userId === entry.userId ? 'is-current-user' : undefined}>
                       <span>#{entry.rank}</span>
                       {entry.avatarUrl ? (
-                        <img src={entry.avatarUrl} alt={entry.username} className="leaderboard-rival-avatar" />
+                        <img src={entry.avatarUrl} alt={entry.username} className="leaderboard-rival-avatar"/>
                       ) : null}
                       <strong>@{entry.username}</strong>
                       <em>{formatMetric(metric, entry.metricValue)}</em>
-                      <small className={entry.trend === 'up' ? 'is-up' : entry.trend === 'down' ? 'is-down' : 'is-flat'}>
+                      <small
+                        className={entry.trend === 'up' ? 'is-up' : entry.trend === 'down' ? 'is-down' : 'is-flat'}>
                         {trendIcon(entry.trend)} {entry.delta > 0 ? `+${entry.delta}` : entry.delta}
                       </small>
                     </article>
@@ -941,7 +965,8 @@ export function LeaderboardPage() {
               </div>
             </section>
 
-            <section className="leaderboard-table" aria-label={activeHubTitle ? `${activeHubTitle} leaderboard table` : 'Global leaderboard table'}>
+            <section className="leaderboard-table"
+                     aria-label={activeHubTitle ? `${activeHubTitle} leaderboard table` : 'Global leaderboard table'}>
               <header>
                 <span>Rank</span>
                 <span>Player</span>
@@ -961,9 +986,10 @@ export function LeaderboardPage() {
                     <span>#{entry.rank}</span>
                     <span className="leaderboard-table-player">
                       {entry.avatarUrl ? (
-                        <img src={entry.avatarUrl} alt={entry.username} className="leaderboard-table-avatar" />
+                        <img src={entry.avatarUrl} alt={entry.username} className="leaderboard-table-avatar"/>
                       ) : (
-                        <span className="leaderboard-table-avatar-placeholder">{entry.username.charAt(0).toUpperCase()}</span>
+                        <span
+                          className="leaderboard-table-avatar-placeholder">{entry.username.charAt(0).toUpperCase()}</span>
                       )}
                       <span className="leaderboard-table-names">
                         <strong>@{entry.username}</strong>
@@ -1014,8 +1040,10 @@ export function LeaderboardPage() {
 
                   {tablePageNumbers[tablePageNumbers.length - 1] < totalTablePages ? (
                     <>
-                      {tablePageNumbers[tablePageNumbers.length - 1] < totalTablePages - 1 ? <span aria-hidden="true">...</span> : null}
-                      <button type="button" onClick={() => setTablePage(totalTablePages)} disabled={loading}>{totalTablePages}</button>
+                      {tablePageNumbers[tablePageNumbers.length - 1] < totalTablePages - 1 ?
+                        <span aria-hidden="true">...</span> : null}
+                      <button type="button" onClick={() => setTablePage(totalTablePages)}
+                              disabled={loading}>{totalTablePages}</button>
                     </>
                   ) : null}
                 </div>
@@ -1112,7 +1140,7 @@ export function LeaderboardPage() {
                       <strong title={hub.title}>{compactHubLabel(hub.title)}</strong>
                       <span>{hub.races} races ({hub.sharePercent}%)</span>
                     </div>
-                    <i style={{ width: `${Math.max(8, Math.round((hub.races / maxHubRaces) * 100))}%` }} />
+                    <i style={{width: `${Math.max(8, Math.round((hub.races / maxHubRaces) * 100))}%`}}/>
                   </div>
                 )) : <p>No hub usage data yet.</p>}
               </div>
@@ -1122,49 +1150,49 @@ export function LeaderboardPage() {
               <article className="league-pulse-card trend-card">
                 <h3>Races trend</h3>
                 <div className="chart-legend" aria-hidden="true">
-                  <span><i className="legend-line" /> Races per bucket</span>
+                  <span><i className="legend-line"/> Races per bucket</span>
                   <span>{timeframe === 'weekly' ? 'Daily buckets' : 'Weekly buckets'}</span>
                 </div>
                 {trendD !== '' ? (
                   <div className="trend-chart-wrap">
-                  <div className="trend-axis-y" aria-hidden="true">
-                    <span>{trendMax}</span>
-                    <span>{trendMid}</span>
-                    <span>0</span>
-                  </div>
-                  <div className="trend-plot">
-                    <svg viewBox="0 0 680 180" role="img" aria-label="Races trend chart">
-                      <line className="trend-grid" x1="0" y1="0" x2="680" y2="0" />
-                      <line className="trend-grid" x1="0" y1="90" x2="680" y2="90" />
-                      <line className="trend-grid" x1="0" y1="180" x2="680" y2="180" />
-                      <path key={`trend-${timeframe}-${metric}`} d={trendD} className="trend-line" />
-                    </svg>
-                    <div className="trend-point-layer" aria-hidden="true">
-                      {trendPoints.map((point, index) => {
-                        const positionClass = [
-                          index === 0 ? 'is-left-edge' : '',
-                          index === trendPoints.length - 1 ? 'is-right-edge' : '',
-                          point.y < 22 ? 'is-top-edge' : '',
-                        ]
-                          .filter(Boolean)
-                          .join(' ')
+                    <div className="trend-axis-y" aria-hidden="true">
+                      <span>{trendMax}</span>
+                      <span>{trendMid}</span>
+                      <span>0</span>
+                    </div>
+                    <div className="trend-plot">
+                      <svg viewBox="0 0 680 180" role="img" aria-label="Races trend chart">
+                        <line className="trend-grid" x1="0" y1="0" x2="680" y2="0"/>
+                        <line className="trend-grid" x1="0" y1="90" x2="680" y2="90"/>
+                        <line className="trend-grid" x1="0" y1="180" x2="680" y2="180"/>
+                        <path key={`trend-${timeframe}-${metric}`} d={trendD} className="trend-line"/>
+                      </svg>
+                      <div className="trend-point-layer" aria-hidden="true">
+                        {trendPoints.map((point, index) => {
+                          const positionClass = [
+                            index === 0 ? 'is-left-edge' : '',
+                            index === trendPoints.length - 1 ? 'is-right-edge' : '',
+                            point.y < 22 ? 'is-top-edge' : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')
 
-                        return (
-                          <button
-                            key={`point-${index}-${stats.racesTrend[index]?.bucket ?? 'b'}`}
-                            type="button"
-                            className={`trend-point ${positionClass}`.trim()}
-                            style={{ left: `${(point.x / 680) * 100}%`, top: `${(point.y / 180) * 100}%` }}
-                            data-tooltip={`${formatBucketLabel(stats.racesTrend[index]?.bucket ?? '')}: ${trendValues[index]} races`}
-                            tabIndex={-1}
-                          />
-                        )
-                      })}
+                          return (
+                            <button
+                              key={`point-${index}-${stats.racesTrend[index]?.bucket ?? 'b'}`}
+                              type="button"
+                              className={`trend-point ${positionClass}`.trim()}
+                              style={{left: `${(point.x / 680) * 100}%`, top: `${(point.y / 180) * 100}%`}}
+                              data-tooltip={`${formatBucketLabel(stats.racesTrend[index]?.bucket ?? '')}: ${trendValues[index]} races`}
+                              tabIndex={-1}
+                            />
+                          )
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <p>No trend data yet.</p>
+                ) : (
+                  <p>No trend data yet.</p>
                 )}
                 {trendTickLabels.length > 0 ? (
                   <div className="trend-axis-x" aria-hidden="true">
@@ -1186,9 +1214,10 @@ export function LeaderboardPage() {
                       data-tooltip={`${tier.key}: ${tier.value.toFixed(1)} WPM`}
                     >
                       <span>{tier.key}</span>
-                      <i style={{ height: `${Math.max(14, Math.round((tier.value / tierMax) * 120))}px` }} />
+                      <i style={{height: `${Math.max(14, Math.round((tier.value / tierMax) * 120))}px`}}/>
                       <strong>{tier.value.toFixed(1)}</strong>
-                      <small className="tier-delta-chip">{tierDeltaLabel(tier.key as 'Gold' | 'Silver' | 'Bronze', timeframe)}</small>
+                      <small
+                        className="tier-delta-chip">{tierDeltaLabel(tier.key as 'Gold' | 'Silver' | 'Bronze', timeframe)}</small>
                     </div>
                   ))}
                 </div>

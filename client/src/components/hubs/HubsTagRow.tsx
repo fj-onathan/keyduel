@@ -12,7 +12,7 @@ type HubsTagRowProps = {
   disabled?: boolean
 }
 
-export function HubsTagRow({ tags, selected, onSelect, disabled = false }: HubsTagRowProps) {
+export function HubsTagRow({tags, selected, onSelect, disabled = false}: HubsTagRowProps) {
   return (
     <div className="hubs-tag-row" aria-label="Most played languages">
       <button
@@ -33,7 +33,7 @@ export function HubsTagRow({ tags, selected, onSelect, disabled = false }: HubsT
           disabled={disabled}
         >
           {tag.label}
-          {tag.hot ? <i className="hubs-tag-hot" aria-hidden="true" /> : null}
+          {tag.hot ? <i className="hubs-tag-hot" aria-hidden="true"/> : null}
           <span>{tag.online}</span>
         </button>
       ))}

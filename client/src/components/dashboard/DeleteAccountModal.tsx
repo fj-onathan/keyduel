@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Modal } from '../ui/Modal'
+import {useCallback, useEffect, useState} from 'react'
+import {Modal} from '../ui/Modal'
 
 export function DeleteAccountModal({
-  open,
-  onClose,
-  onConfirm,
-  isDeleting,
-}: {
+                                     open,
+                                     onClose,
+                                     onConfirm,
+                                     isDeleting,
+                                   }: {
   open: boolean
   onClose: () => void
   onConfirm: () => void

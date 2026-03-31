@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
-import { HubCard } from '../components/hubs/HubCard'
-import { HubsHero } from '../components/hubs/HubsHero'
-import { HubsTagRow, type HubsLanguageTag } from '../components/hubs/HubsTagRow'
-import { apiGet } from '../lib/api'
+import {useEffect, useMemo, useState} from 'react'
+import {HubCard} from '../components/hubs/HubCard'
+import {HubsHero} from '../components/hubs/HubsHero'
+import {type HubsLanguageTag, HubsTagRow} from '../components/hubs/HubsTagRow'
+import {apiGet} from '../lib/api'
 
 type HubItem = {
   id: string
@@ -61,7 +61,7 @@ export function HubsPage() {
   useEffect(() => {
     const controller = new AbortController()
 
-    void apiGet<HubsResponse>('/hubs?activeOnly=true', { signal: controller.signal })
+    void apiGet<HubsResponse>('/hubs?activeOnly=true', {signal: controller.signal})
       .then((payload) => {
         setAllHubs(payload.items)
         setAllHubsLoaded(true)
@@ -103,7 +103,7 @@ export function HubsPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setError('')
 
-    void apiGet<HubsResponse>(`/hubs?${params.toString()}`, { signal: controller.signal })
+    void apiGet<HubsResponse>(`/hubs?${params.toString()}`, {signal: controller.signal})
       .then((payload) => {
         setItems(payload.items)
         setTotal(payload.total ?? payload.items.length)
@@ -137,7 +137,7 @@ export function HubsPage() {
         .sort((a, b) => b.activePlayers - a.activePlayers || b.racesToday - a.racesToday)[0]
         ?.language ?? 'n/a'
 
-    return { totalHubs, rankedHubs, totalOnline, totalRacesToday, topLanguage }
+    return {totalHubs, rankedHubs, totalOnline, totalRacesToday, topLanguage}
   }, [allHubs])
 
   const languageTags: HubsLanguageTag[] = useMemo(() => {
@@ -179,7 +179,7 @@ export function HubsPage() {
       start = Math.max(1, end - windowSize + 1)
     }
 
-    return Array.from({ length: end - start + 1 }, (_, index) => start + index)
+    return Array.from({length: end - start + 1}, (_, index) => start + index)
   }, [page, totalPages])
 
   const hasQuery = query.trim().length > 0
@@ -263,15 +263,15 @@ export function HubsPage() {
 
           {gridLoading ? (
             <div className="hubs-grid">
-              {Array.from({ length: 6 }).map((_, index) => (
+              {Array.from({length: 6}).map((_, index) => (
                 <article key={index} className="hub-card hub-card-skeleton" aria-hidden="true">
-                  <div className="hub-card-skeleton-line hub-card-skeleton-line-long" />
-                  <div className="hub-card-skeleton-line hub-card-skeleton-line-short" />
+                  <div className="hub-card-skeleton-line hub-card-skeleton-line-long"/>
+                  <div className="hub-card-skeleton-line hub-card-skeleton-line-short"/>
                   <div className="hub-card-skeleton-grid">
-                    <div className="hub-card-skeleton-line hub-card-skeleton-line-mid" />
-                    <div className="hub-card-skeleton-line hub-card-skeleton-line-small" />
-                    <div className="hub-card-skeleton-line hub-card-skeleton-line-mid" />
-                    <div className="hub-card-skeleton-line hub-card-skeleton-line-small" />
+                    <div className="hub-card-skeleton-line hub-card-skeleton-line-mid"/>
+                    <div className="hub-card-skeleton-line hub-card-skeleton-line-small"/>
+                    <div className="hub-card-skeleton-line hub-card-skeleton-line-mid"/>
+                    <div className="hub-card-skeleton-line hub-card-skeleton-line-small"/>
                   </div>
                 </article>
               ))}
@@ -279,13 +279,14 @@ export function HubsPage() {
           ) : (
             <div className="hubs-grid">
               {gridItems.map((hub) => (
-                <HubCard key={hub.id} hub={hub} maxActivePlayers={maxActivePlayers} />
+                <HubCard key={hub.id} hub={hub} maxActivePlayers={maxActivePlayers}/>
               ))}
             </div>
           )}
 
           <div className="hubs-pagination" aria-label="Hubs pagination">
-            <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page <= 1 || gridLoading}>
+            <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))}
+                    disabled={page <= 1 || gridLoading}>
               Previous
             </button>
             <div className="hubs-pagination-pages" role="group" aria-label="Page numbers">
@@ -323,7 +324,8 @@ export function HubsPage() {
             <p>
               Page <strong>{page}</strong> of <strong>{totalPages}</strong>
             </p>
-            <button type="button" onClick={() => setPage((current) => Math.min(totalPages, current + 1))} disabled={page >= totalPages || gridLoading}>
+            <button type="button" onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                    disabled={page >= totalPages || gridLoading}>
               Next
             </button>
           </div>

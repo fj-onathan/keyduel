@@ -1,6 +1,6 @@
-import { memo } from 'react'
-import { Link } from 'react-router-dom'
-import type { RaceResult } from '../../types/race'
+import {memo} from 'react'
+import {Link} from 'react-router-dom'
+import type {RaceResult} from '../../types/race'
 
 function formatTime(ms: number): string {
   if (ms <= 0) return '--'
@@ -10,7 +10,10 @@ function formatTime(ms: number): string {
   return m > 0 ? `${m}m ${s}s` : `${s}s`
 }
 
-export const RaceResults = memo(function RaceResults({ results, replayUrl }: { results: RaceResult[]; replayUrl?: string }) {
+export const RaceResults = memo(function RaceResults({results, replayUrl}: {
+  results: RaceResult[];
+  replayUrl?: string
+}) {
   const winner = results[0] ?? null
   const finishedPlayers = results.filter((r) => r.finished)
   const avgWpm = finishedPlayers.length > 0 ? finishedPlayers.reduce((sum, r) => sum + r.netWpm, 0) / finishedPlayers.length : 0
@@ -68,7 +71,7 @@ export const RaceResults = memo(function RaceResults({ results, replayUrl }: { r
               <li
                 key={result.clientId}
                 className={result.position === 1 ? 'is-first' : ''}
-                style={{ '--row-index': index } as React.CSSProperties}
+                style={{'--row-index': index} as React.CSSProperties}
               >
                 <span className="race-result-position">#{result.position}</span>
                 <strong>{result.displayName || result.clientId}</strong>
