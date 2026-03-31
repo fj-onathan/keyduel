@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import type {ReactNode} from 'react'
+import {Link} from 'react-router-dom'
 
 type Variant = 'primary' | 'secondary'
 
@@ -11,7 +11,11 @@ const variantClass: Record<Variant, string> = {
   secondary: 'border border-white/20 bg-[#16110d]/75 text-[#f2e7da] hover:-translate-y-0.5 hover:border-white/30',
 }
 
-export function ButtonLink({ to, variant = 'secondary', children }: { to: string; variant?: Variant; children: ReactNode }) {
+export function ButtonLink({to, variant = 'secondary', children}: {
+  to: string;
+  variant?: Variant;
+  children: ReactNode
+}) {
   return (
     <Link to={to} className={`${baseClass} ${variantClass[variant]}`}>
       {children}

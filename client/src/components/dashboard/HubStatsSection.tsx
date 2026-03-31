@@ -1,9 +1,9 @@
-import type { HubStat } from '../../lib/api'
+import type {HubStat} from '../../lib/api'
 
 export function HubStatsSection({
-  stats,
-  loading,
-}: {
+                                  stats,
+                                  loading,
+                                }: {
   stats: HubStat[]
   loading: boolean
 }) {

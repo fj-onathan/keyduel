@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { RaceEditorPanel } from '../components/race/RaceEditorPanel'
-import { RaceHeader } from '../components/race/RaceHeader'
-import { RaceResults } from '../components/race/RaceResults'
-import { RaceStandings } from '../components/race/RaceStandings'
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
+import {RaceEditorPanel} from '../components/race/RaceEditorPanel'
+import {RaceHeader} from '../components/race/RaceHeader'
+import {RaceResults} from '../components/race/RaceResults'
+import {RaceStandings} from '../components/race/RaceStandings'
 import { Modal } from '../components/ui/Modal'
 import { Button } from '../components/ui/Button'
 import { playFinishSound } from '../lib/sounds'
 import { useRaceStore, getSavedSession } from '../store/raceStore'
-import { useToastStore } from '../store/toastStore'
-import { useUIStore } from '../store/uiStore'
-import { env } from '../config/env'
-import type { ParticipantSnapshot, RaceResult } from '../types/race'
+import {useToastStore} from '../store/toastStore'
+import {useUIStore} from '../store/uiStore'
+import {env} from '../config/env'
+import type {ParticipantSnapshot, RaceResult} from '../types/race'
 
 const MOCK_SNIPPET = `package main
 
@@ -31,7 +31,7 @@ function clampProgress(progress: number, snippetLength: number) {
 }
 
 export function RacePage() {
-  const { hub: hubParam, raceId: raceIdParam } = useParams<{ hub: string; raceId: string }>()
+  const {hub: hubParam, raceId: raceIdParam} = useParams<{ hub: string; raceId: string }>()
   const location = useLocation()
   const disconnect = useRaceStore((state) => state.disconnect)
   const leaveRoom = useRaceStore((state) => state.leaveRoom)
@@ -115,7 +115,7 @@ export function RacePage() {
   useEffect(() => {
     if (isMock || !hubParam) return
     if (hub !== hubParam) {
-      useRaceStore.setState({ hub: hubParam })
+      useRaceStore.setState({hub: hubParam})
     }
   }, [isMock, hubParam, hub])
 
@@ -141,14 +141,16 @@ export function RacePage() {
       .then((data: { status?: string } | null) => {
         if (cancelled || !data) return
         if (data.status === 'finished' || data.status === 'cancelled') {
-          void navigate(`/race/${hubParam}/${raceIdParam}/replay`, { replace: true })
+          void navigate(`/race/${hubParam}/${raceIdParam}/replay`, {replace: true})
         }
       })
       .catch(() => {
         // Race not found or network error — stay on page, user can click Join
       })
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [isMock, raceIdParam, hubParam, roomId, results.length, navigate])
 
   // Pre-join: poll the race-engine REST API every 5s so visitors can see
@@ -177,7 +179,7 @@ export function RacePage() {
             // Room was deleted (everyone left) or race not found — clear
             // the stale participant list so the viewer sees it go empty.
             if (!cancelled && !useRaceStore.getState().roomId) {
-              useRaceStore.setState({ participants: [] })
+              useRaceStore.setState({participants: []})
             }
             return null
           }
@@ -198,7 +200,7 @@ export function RacePage() {
         .catch(() => {
           // Network error — clear participants to avoid stale data
           if (!cancelled && !useRaceStore.getState().roomId) {
-            useRaceStore.setState({ participants: [] })
+            useRaceStore.setState({participants: []})
           }
         })
     }
@@ -231,10 +233,10 @@ export function RacePage() {
 
   const mockBotProgress = useMemo(() => {
     if (!isMock) {
-      return { alpha: 0, beta: 0 }
+      return {alpha: 0, beta: 0}
     }
     if (typedValue.length === 0) {
-      return { alpha: 0, beta: 0 }
+      return {alpha: 0, beta: 0}
     }
 
     const maxBotProgress = Math.max(0, snippetLength - 2)
@@ -557,11 +559,12 @@ export function RacePage() {
           isLowTime={isLowTime}
           onType={handleType}
         />
-        <RaceStandings participants={sortedParticipants} clientId={clientId || 'you-local'} snippetLength={snippetLength} phase={phase} />
+        <RaceStandings participants={sortedParticipants} clientId={clientId || 'you-local'}
+                       snippetLength={snippetLength} phase={phase}/>
       </div>
 
-      <RaceResults results={resultsValue} replayUrl={!isMock && raceIdParam ? `/race/${hubParam ?? 'go'}/${raceIdParam}/replay` : undefined} />
-
+      <RaceResults results={resultsValue}
+                   replayUrl={!isMock && raceIdParam ? `/race/${hubParam ?? 'go'}/${raceIdParam}/replay` : undefined}/>
       <Modal open={pendingSoloConfirm} onClose={cancelSoloConfirm} title="Start Solo Race?">
         <div className="solo-confirm-body">
           <p className="solo-confirm-message">

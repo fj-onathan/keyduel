@@ -1,4 +1,4 @@
-import type { MyAccountResponse } from '../../lib/api'
+import type {MyAccountResponse} from '../../lib/api'
 
 function formatMemberSince(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', {
@@ -8,10 +8,10 @@ function formatMemberSince(iso: string): string {
 }
 
 export function PrivacyAccountSection({
-  account,
-  loading,
-  onDeleteClick,
-}: {
+                                        account,
+                                        loading,
+                                        onDeleteClick,
+                                      }: {
   account: MyAccountResponse | null
   loading: boolean
   onDeleteClick: () => void

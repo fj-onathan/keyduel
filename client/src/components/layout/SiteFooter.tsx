@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { env } from "../../config/env";
+import {Link} from "react-router-dom";
+import {env} from "../../config/env";
 
 export function SiteFooter() {
   return (
@@ -13,7 +13,7 @@ export function SiteFooter() {
             >
               <span className="top-nav-brand-orb-core site-footer-brand-orb-core">
                 <span>{"{"}</span>
-                <span style={{ opacity: 0.5 }}>{"}"}</span>
+                <span style={{opacity: 0.5}}>{"}"}</span>
               </span>
             </div>
             <span>{env.appName}</span>

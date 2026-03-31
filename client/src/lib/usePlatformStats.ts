@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { env } from '../config/env'
+import {useEffect, useRef, useState} from 'react'
+import {env} from '../config/env'
 
 export type PlatformStats = {
   onlinePlayers: number
@@ -26,7 +26,7 @@ export function usePlatformStats(): PlatformStats {
 
   useEffect(() => {
     const url = `${env.apiBaseUrl}/platform-stats`
-    const source = new EventSource(url, { withCredentials: true })
+    const source = new EventSource(url, {withCredentials: true})
     sourceRef.current = source
 
     source.onmessage = (event) => {

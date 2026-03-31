@@ -1,29 +1,29 @@
-import { useEffect, useMemo, useState } from "react";
-import { FeatureCard } from "../components/landing/FeatureCard";
-import { EngagementSection } from "../components/landing/EngagementSection";
-import { HeroRaceWindow } from "../components/landing/HeroRaceWindow";
-import { MiniRacePreview } from "../components/landing/MiniRacePreview";
-import { MiniStepsPreview } from "../components/landing/MiniStepsPreview";
-import { MiniSearchPreview } from "../components/landing/MiniSearchPreview";
-import { MiniSecurityPreview } from "../components/landing/MiniSecurityPreview";
-import { MiniFilesPreview } from "../components/landing/MiniFilesPreview";
-import { MiniRanksPreview } from "../components/landing/MiniRanksPreview";
-import { ProfileLeaderboardSection } from "../components/landing/ProfileLeaderboardSection";
-import { PracticeModal } from "../components/practice/PracticeModal";
-import { ButtonLink } from "../components/ui/ButtonLink";
-import { MobileWarningModal } from "../components/ui/MobileWarningModal";
-import { usePlatformStats } from "../lib/usePlatformStats";
-import { useIsMobile } from "../lib/useIsMobile";
+import {useEffect, useMemo, useState} from "react";
+import {FeatureCard} from "../components/landing/FeatureCard";
+import {EngagementSection} from "../components/landing/EngagementSection";
+import {HeroRaceWindow} from "../components/landing/HeroRaceWindow";
+import {MiniRacePreview} from "../components/landing/MiniRacePreview";
+import {MiniStepsPreview} from "../components/landing/MiniStepsPreview";
+import {MiniSearchPreview} from "../components/landing/MiniSearchPreview";
+import {MiniSecurityPreview} from "../components/landing/MiniSecurityPreview";
+import {MiniFilesPreview} from "../components/landing/MiniFilesPreview";
+import {MiniRanksPreview} from "../components/landing/MiniRanksPreview";
+import {ProfileLeaderboardSection} from "../components/landing/ProfileLeaderboardSection";
+import {PracticeModal} from "../components/practice/PracticeModal";
+import {ButtonLink} from "../components/ui/ButtonLink";
+import {MobileWarningModal} from "../components/ui/MobileWarningModal";
+import {usePlatformStats} from "../lib/usePlatformStats";
+import {useIsMobile} from "../lib/useIsMobile";
 import type {
+  FilesPreviewData,
   LaneFrame,
   LaneKey,
-  StepsPreviewData,
+  RanksPreviewData,
   SearchPreviewData,
   SecurityPreviewData,
-  FilesPreviewData,
-  RanksPreviewData,
+  StepsPreviewData,
 } from "../components/landing/types";
-import { useUIStore } from "../store/uiStore";
+import {useUIStore} from "../store/uiStore";
 
 /* ── Race animation constants ── */
 const LOOP_MS = 18000;
@@ -33,40 +33,40 @@ const RACE_MS = LOOP_MS - COUNTDOWN_MS - FINISH_MS;
 
 const laneTracks: Record<LaneKey, LaneFrame[]> = {
   alpha: [
-    { t: 0, value: 18 },
-    { t: 20, value: 42 },
-    { t: 40, value: 64 },
-    { t: 43, value: 70 },
-    { t: 44, value: 69 },
-    { t: 60, value: 66 },
-    { t: 79, value: 62 },
-    { t: 80, value: 61 },
-    { t: 90, value: 59 },
-    { t: 96, value: 57 },
+    {t: 0, value: 18},
+    {t: 20, value: 42},
+    {t: 40, value: 64},
+    {t: 43, value: 70},
+    {t: 44, value: 69},
+    {t: 60, value: 66},
+    {t: 79, value: 62},
+    {t: 80, value: 61},
+    {t: 90, value: 59},
+    {t: 96, value: 57},
   ],
   beta: [
-    { t: 0, value: 14 },
-    { t: 20, value: 36 },
-    { t: 40, value: 61 },
-    { t: 43, value: 68 },
-    { t: 44, value: 70 },
-    { t: 60, value: 80 },
-    { t: 79, value: 83 },
-    { t: 80, value: 82 },
-    { t: 90, value: 78 },
-    { t: 96, value: 74 },
+    {t: 0, value: 14},
+    {t: 20, value: 36},
+    {t: 40, value: 61},
+    {t: 43, value: 68},
+    {t: 44, value: 70},
+    {t: 60, value: 80},
+    {t: 79, value: 83},
+    {t: 80, value: 82},
+    {t: 90, value: 78},
+    {t: 96, value: 74},
   ],
   gamma: [
-    { t: 0, value: 12 },
-    { t: 20, value: 30 },
-    { t: 40, value: 50 },
-    { t: 43, value: 58 },
-    { t: 44, value: 59 },
-    { t: 60, value: 67 },
-    { t: 79, value: 74 },
-    { t: 80, value: 76 },
-    { t: 90, value: 84 },
-    { t: 96, value: 100 },
+    {t: 0, value: 12},
+    {t: 20, value: 30},
+    {t: 40, value: 50},
+    {t: 43, value: 58},
+    {t: 44, value: 59},
+    {t: 60, value: 67},
+    {t: 79, value: 74},
+    {t: 80, value: 76},
+    {t: 90, value: 84},
+    {t: 96, value: 100},
   ],
 };
 
@@ -143,7 +143,7 @@ export function LandingPage() {
   /* ── Race data (existing) ── */
   const raceData = useMemo(() => {
     if (reducedEffects) {
-      const fixed = { alpha: 62, beta: 58, gamma: 53 };
+      const fixed = {alpha: 62, beta: 58, gamma: 53};
       return {
         progress: fixed,
         lead: "alpha" as LaneKey,
@@ -164,7 +164,7 @@ export function LandingPage() {
     const round = Math.floor(tick / LOOP_MS);
     if (cycleTime < COUNTDOWN_MS) {
       return {
-        progress: { alpha: 0, beta: 0, gamma: 0 },
+        progress: {alpha: 0, beta: 0, gamma: 0},
         lead: "alpha" as LaneKey,
         isCountdown: true,
         isFinish: false,
@@ -240,7 +240,7 @@ export function LandingPage() {
   /* ── Steps data (Card 4: Fast Match Loop) ── */
   const stepsData = useMemo<StepsPreviewData>(() => {
     if (reducedEffects) {
-      return { activeIndex: 2 }; // Countdown active, Queue+Match complete
+      return {activeIndex: 2}; // Countdown active, Queue+Match complete
     }
     const cycle = tick % STEPS_LOOP_MS;
     const activeIndex =
@@ -255,13 +255,13 @@ export function LandingPage() {
               : cycle < 5400
                 ? 4 // all complete
                 : -1; // resetting
-    return { activeIndex };
+    return {activeIndex};
   }, [reducedEffects, tick]);
 
   /* ── Search data (Card 1: Language Hubs) ── */
   const searchData = useMemo<SearchPreviewData>(() => {
     if (reducedEffects) {
-      return { typedText: "go", activePill: "go", showCursor: false };
+      return {typedText: "go", activePill: "go", showCursor: false};
     }
     const cycle = tick % SEARCH_LOOP_MS;
 
@@ -326,9 +326,9 @@ export function LandingPage() {
         const charsLeft = Math.max(
           0,
           phase.word.length -
-            Math.floor(
-              (clearElapsed / clearDuration) * (phase.word.length + 1),
-            ),
+          Math.floor(
+            (clearElapsed / clearDuration) * (phase.word.length + 1),
+          ),
         );
         return {
           typedText: phase.word.slice(0, charsLeft),
@@ -338,17 +338,17 @@ export function LandingPage() {
       }
     }
 
-    return { typedText: "", activePill: null, showCursor: true };
+    return {typedText: "", activePill: null, showCursor: true};
   }, [reducedEffects, tick]);
 
   /* ── Security data (Card 5: Fairness Controls) ── */
   const securityData = useMemo<SecurityPreviewData>(() => {
     if (reducedEffects) {
-      return { visibleCount: 3, isClearing: false, entryIndex: -1 };
+      return {visibleCount: 3, isClearing: false, entryIndex: -1};
     }
     const cycle = tick % SECURITY_LOOP_MS;
     if (cycle >= 7500) {
-      return { visibleCount: 3, isClearing: true, entryIndex: -1 };
+      return {visibleCount: 3, isClearing: true, entryIndex: -1};
     }
     const visibleCount = cycle < 2500 ? 1 : cycle < 5000 ? 2 : 3;
     // Determine which event just entered (within 400ms of appearing)
@@ -357,7 +357,7 @@ export function LandingPage() {
     else if (cycle >= 2500 && cycle < 2900) entryIndex = 1;
     else if (cycle >= 5000 && cycle < 5400) entryIndex = 2;
 
-    return { visibleCount, isClearing: false, entryIndex };
+    return {visibleCount, isClearing: false, entryIndex};
   }, [reducedEffects, tick]);
 
   /* ── Files data (Card 3: Persistent Results) ── */
@@ -379,9 +379,9 @@ export function LandingPage() {
     // File 1: visible 1500ms, types 1500-2700ms, saved at 2700ms
     // File 2: visible 3000ms, types 3000-4200ms, saved at 4200ms
     const fileTimings = [
-      { visibleAt: 0, typeStart: 0, typeEnd: 1200, savedAt: 1200 },
-      { visibleAt: 1500, typeStart: 1500, typeEnd: 2700, savedAt: 2700 },
-      { visibleAt: 3000, typeStart: 3000, typeEnd: 4200, savedAt: 4200 },
+      {visibleAt: 0, typeStart: 0, typeEnd: 1200, savedAt: 1200},
+      {visibleAt: 1500, typeStart: 1500, typeEnd: 2700, savedAt: 2700},
+      {visibleAt: 3000, typeStart: 3000, typeEnd: 4200, savedAt: 4200},
     ];
 
     const files = FILE_NAMES.map((name, i) => {
@@ -389,7 +389,7 @@ export function LandingPage() {
       const isVisible = cycle >= t.visibleAt;
 
       if (!isVisible) {
-        return { charCount: 0, isSaved: false, isVisible: false };
+        return {charCount: 0, isSaved: false, isVisible: false};
       }
 
       let charCount: number;
@@ -404,10 +404,10 @@ export function LandingPage() {
       }
 
       const isSaved = cycle >= t.savedAt;
-      return { charCount, isSaved, isVisible: true };
+      return {charCount, isSaved, isVisible: true};
     });
 
-    return { files, isFading };
+    return {files, isFading};
   }, [reducedEffects, tick]);
 
   /* ── Ranks data (Card 6: Seasonal Climb) ── */
@@ -452,7 +452,7 @@ export function LandingPage() {
 
       if (elapsed < 0) {
         // Not started climbing yet
-        return { value: track[0], prevValue: null, isClimbing: false };
+        return {value: track[0], prevValue: null, isClimbing: false};
       }
 
       const stepIndex = Math.min(
@@ -466,11 +466,11 @@ export function LandingPage() {
       const timeSinceStep = elapsed - stepIndex * climbInterval;
       const isClimbing = stepIndex > 0 && timeSinceStep < climbFlashDuration;
 
-      return { value, prevValue, isClimbing };
+      return {value, prevValue, isClimbing};
     });
 
     const isSettled = cycle >= 7000;
-    return { ranks, isSettled, isVisible: true };
+    return {ranks, isSettled, isVisible: true};
   }, [reducedEffects, tick]);
 
   return (
@@ -481,17 +481,17 @@ export function LandingPage() {
           : "layout mx-auto max-w-7xl px-6"
       }
     >
-      <div className="nebula hidden" aria-hidden="true" />
-      <div className="scanline hidden" aria-hidden="true" />
-      <div className="grid-overlay" aria-hidden="true" />
-      <div className="hero-vignette hidden" aria-hidden="true" />
+      <div className="nebula hidden" aria-hidden="true"/>
+      <div className="scanline hidden" aria-hidden="true"/>
+      <div className="grid-overlay" aria-hidden="true"/>
+      <div className="hero-vignette hidden" aria-hidden="true"/>
 
       <section className="mb-10 mt-10 flex flex-col items-center text-center sm:mb-14 sm:mt-16 md:mt-20">
         <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
           <div className="hero-orb animate-in a1" aria-hidden="true">
             <span className="hero-orb-core">
               <span className="">{"{"}</span>
-              <span className="" style={{ opacity: 0.5 }}>
+              <span className="" style={{opacity: 0.5}}>
                 {"}"}
               </span>
             </span>
@@ -547,11 +547,12 @@ export function LandingPage() {
           </div>
         </div>
 
-        <HeroRaceWindow />
+        <HeroRaceWindow/>
       </section>
 
       <section className="spacious-section px-2 text-center sm:px-0">
-        <h2 className="mx-auto max-w-4xl font-sans text-2xl font-semibold tracking-tight text-[#fff0e2] sm:text-3xl md:text-5xl">
+        <h2
+          className="mx-auto max-w-4xl font-sans text-2xl font-semibold tracking-tight text-[#fff0e2] sm:text-3xl md:text-5xl">
           Understand the concept in one glance
         </h2>
         <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-[#cbb9a7] md:text-base">
@@ -567,7 +568,7 @@ export function LandingPage() {
         <FeatureCard
           title="Language Hubs"
           description="Queue into focused hubs per stack and keep your rankings separated by context."
-          preview={<MiniSearchPreview data={searchData} />}
+          preview={<MiniSearchPreview data={searchData}/>}
         />
 
         <FeatureCard
@@ -584,25 +585,25 @@ export function LandingPage() {
         <FeatureCard
           title="Persistent Results"
           description="Finished races are written to Postgres so profiles and leaderboards are always auditable."
-          preview={<MiniFilesPreview data={filesData} />}
+          preview={<MiniFilesPreview data={filesData}/>}
         />
 
         <FeatureCard
           title="Fast Match Loop"
           description="Short queue cycles and deterministic room assignment keep gameplay snappy and focused."
-          preview={<MiniStepsPreview data={stepsData} />}
+          preview={<MiniStepsPreview data={stepsData}/>}
         />
 
         <FeatureCard
           title="Fairness Controls"
           description="Server-side input validation protects races from impossible progress jumps and macro-like behavior."
-          preview={<MiniSecurityPreview data={securityData} />}
+          preview={<MiniSecurityPreview data={securityData}/>}
         />
 
         <FeatureCard
           title="Seasonal Climb"
           description="Track speed, accuracy, and wins as separate competitive ladders for long-term progression."
-          preview={<MiniRanksPreview data={ranksData} />}
+          preview={<MiniRanksPreview data={ranksData}/>}
         />
       </section>
 
@@ -612,7 +613,7 @@ export function LandingPage() {
         playersOnline={platformStats.onlinePlayers}
       />
 
-      <ProfileLeaderboardSection />
+      <ProfileLeaderboardSection/>
 
       <PracticeModal
         open={practiceOpen}

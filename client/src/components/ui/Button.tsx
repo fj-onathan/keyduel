@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type {ButtonHTMLAttributes, ReactNode} from "react";
 
 type Variant = "primary" | "secondary";
 
@@ -12,11 +12,11 @@ const variantClass: Record<Variant, string> = {
 };
 
 export function Button({
-  variant = "secondary",
-  className,
-  children,
-  ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & {
+                         variant = "secondary",
+                         className,
+                         children,
+                         ...props
+                       }: ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant;
   children: ReactNode;
 }) {

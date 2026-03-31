@@ -1,10 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { ButtonLink } from '../ui/ButtonLink'
-import { apiGet } from '../../lib/api'
-import {
-  getShowcaseHeatmap,
-  showcaseProfile,
-} from './mockProfileLeaderboardData'
+import {useEffect, useMemo, useRef, useState} from 'react'
+import {ButtonLink} from '../ui/ButtonLink'
+import {apiGet} from '../../lib/api'
+import {getShowcaseHeatmap, showcaseProfile,} from './mockProfileLeaderboardData'
 
 type LeaderboardPeriod = 'weekly' | 'all-time'
 
@@ -73,7 +70,7 @@ export function ProfileLeaderboardSection() {
     const hubParam = hub !== 'all' ? `/${hub}` : ''
     apiGet<ApiLeaderboardResponse>(
       `/leaderboard${hubParam}?metric=speed&range=${period}&limit=6&offset=0`,
-      { signal: controller.signal },
+      {signal: controller.signal},
     )
       .then((data) => {
         if (!controller.signal.aborted) {
@@ -98,7 +95,8 @@ export function ProfileLeaderboardSection() {
   return (
     <section className="profile-leaderboard-section spacious-section" aria-label="Profile and leaderboard preview">
       <div className="px-2 text-center sm:px-0">
-        <h2 className="mx-auto max-w-4xl font-sans text-2xl font-semibold tracking-tight text-[#fff0e2] sm:text-3xl md:text-5xl">
+        <h2
+          className="mx-auto max-w-4xl font-sans text-2xl font-semibold tracking-tight text-[#fff0e2] sm:text-3xl md:text-5xl">
           Track your profile. Climb every board.
         </h2>
         <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-[#cbb9a7] md:text-base">
@@ -109,7 +107,7 @@ export function ProfileLeaderboardSection() {
       <div className="profile-leaderboard-grid">
         <article className="profile-card-preview animate-in a4">
           <div className="profile-card-header">
-            <img src={showcaseProfile.avatar} alt="Showcase player avatar" className="profile-avatar" />
+            <img src={showcaseProfile.avatar} alt="Showcase player avatar" className="profile-avatar"/>
             <div>
               <p className="profile-name">{showcaseProfile.name}</p>
               <div className="profile-tags">
@@ -157,11 +155,11 @@ export function ProfileLeaderboardSection() {
           <div className="profile-heatmap-legend" aria-hidden="true">
             <span>Less</span>
             <div className="profile-heatmap-legend-scale">
-              <i className="heat-0" />
-              <i className="heat-1" />
-              <i className="heat-2" />
-              <i className="heat-3" />
-              <i className="heat-4" />
+              <i className="heat-0"/>
+              <i className="heat-1"/>
+              <i className="heat-2"/>
+              <i className="heat-3"/>
+              <i className="heat-4"/>
             </div>
             <span>More</span>
           </div>
@@ -238,9 +236,10 @@ export function ProfileLeaderboardSection() {
                     <span className="leaderboard-player truncate" role="cell">
                       <span className="leaderboard-player-info">
                         {row.avatarUrl ? (
-                          <img src={row.avatarUrl} alt={row.username} className="leaderboard-preview-avatar" />
+                          <img src={row.avatarUrl} alt={row.username} className="leaderboard-preview-avatar"/>
                         ) : (
-                          <span className="leaderboard-preview-avatar-placeholder">{row.username.charAt(0).toUpperCase()}</span>
+                          <span
+                            className="leaderboard-preview-avatar-placeholder">{row.username.charAt(0).toUpperCase()}</span>
                         )}
                         <span className="leaderboard-player-names">
                           <strong>@{row.username}</strong>
@@ -257,7 +256,9 @@ export function ProfileLeaderboardSection() {
                     <span className="leaderboard-races" role="cell">
                       {row.racesPlayed}
                     </span>
-                    <span className={`leaderboard-delta ${row.rankDelta > 0 ? 'is-up' : row.rankDelta < 0 ? 'is-down' : 'is-flat'}`} role="cell">
+                    <span
+                      className={`leaderboard-delta ${row.rankDelta > 0 ? 'is-up' : row.rankDelta < 0 ? 'is-down' : 'is-flat'}`}
+                      role="cell">
                       {row.rankDelta > 0 ? `+${row.rankDelta}` : row.rankDelta}
                     </span>
                   </div>

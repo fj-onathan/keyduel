@@ -1,6 +1,6 @@
-import { useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { HubSelectionModal } from '../components/race/HubSelectionModal'
+import {useCallback, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {HubSelectionModal} from '../components/race/HubSelectionModal'
 
 type HubItem = {
   id: string
@@ -39,10 +39,10 @@ export function RaceEntryPage() {
 
   return (
     <main className="race-entry-page">
-      <HubSelectionModal open={modalOpen} onClose={handleClose} onSelect={handleSelect} />
+      <HubSelectionModal open={modalOpen} onClose={handleClose} onSelect={handleSelect}/>
       {!modalOpen ? (
         <div className="race-entry-redirect">
-          <span className="hub-modal-spinner" />
+          <span className="hub-modal-spinner"/>
           <p>Redirecting...</p>
         </div>
       ) : null}

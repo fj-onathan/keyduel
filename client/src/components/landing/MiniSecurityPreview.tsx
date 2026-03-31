@@ -1,9 +1,9 @@
-import type { SecurityPreviewData } from './types'
+import type {SecurityPreviewData} from './types'
 
 const EVENTS = ['rate limit active', 'invalid jump blocked', 'suspicious flagged']
 
-export function MiniSecurityPreview({ data }: { data: SecurityPreviewData }) {
-  const { visibleCount, isClearing, entryIndex } = data
+export function MiniSecurityPreview({data}: { data: SecurityPreviewData }) {
+  const {visibleCount, isClearing, entryIndex} = data
 
   return (
     <div className={isClearing ? 'mini-security-wrap is-clearing' : 'mini-security-wrap'}>
@@ -17,7 +17,7 @@ export function MiniSecurityPreview({ data }: { data: SecurityPreviewData }) {
 
         return (
           <div key={label} className={cls}>
-            <span className="mini-secure-dot" aria-hidden="true" />
+            <span className="mini-secure-dot" aria-hidden="true"/>
             {label}
           </div>
         )

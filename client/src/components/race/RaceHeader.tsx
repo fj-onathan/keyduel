@@ -1,8 +1,8 @@
-import { memo, useState } from 'react'
-import { Button } from '../ui/Button'
-import { MobileWarningModal } from '../ui/MobileWarningModal'
-import { useUIStore } from '../../store/uiStore'
-import { useIsMobile } from '../../lib/useIsMobile'
+import {memo, useState} from 'react'
+import {Button} from '../ui/Button'
+import {MobileWarningModal} from '../ui/MobileWarningModal'
+import {useUIStore} from '../../store/uiStore'
+import {useIsMobile} from '../../lib/useIsMobile'
 
 type RacePhase = 'queued' | 'countdown' | 'active' | 'finished'
 
@@ -43,23 +43,23 @@ function formatTime(seconds: number): string {
 }
 
 export const RaceHeader = memo(function RaceHeader({
-  raceId: _raceId, // eslint-disable-line @typescript-eslint/no-unused-vars -- reserved for future use
-  roomId,
-  hub,
-  socketState,
-  statusMessage,
-  phase,
-  hud,
-  snippetLen,
-  playerCount,
-  isLeader,
-  timeRemainingSeconds,
-  isLowTime,
-  onJoin,
-  onLeaveRoom,
-  onStartRace,
-  onRaceAgain,
-}: {
+                                                     raceId: _raceId, // eslint-disable-line @typescript-eslint/no-unused-vars -- reserved for future use
+                                                     roomId,
+                                                     hub,
+                                                     socketState,
+                                                     statusMessage,
+                                                     phase,
+                                                     hud,
+                                                     snippetLen,
+                                                     playerCount,
+                                                     isLeader,
+                                                     timeRemainingSeconds,
+                                                     isLowTime,
+                                                     onJoin,
+                                                     onLeaveRoom,
+                                                     onStartRace,
+                                                     onRaceAgain,
+                                                   }: {
   raceId: string
   roomId: string
   hub: string
@@ -110,20 +110,20 @@ export const RaceHeader = memo(function RaceHeader({
       <div className="race-header-chips" aria-label="Race metadata">
         <div className="race-chips-status">
           <span className="race-chip race-chip-room">
-            <span className="race-chip-dot" />
+            <span className="race-chip-dot"/>
             {roomId ? roomId.slice(0, 8) : 'No room'}
           </span>
           <span className={`race-chip race-chip-socket is-${socketState}`}>
-            <span className="race-chip-dot" />
+            <span className="race-chip-dot"/>
             {socketState}
           </span>
           <span className={`race-chip race-chip-phase is-${phase}`}>
-            <span className="race-chip-dot" />
+            <span className="race-chip-dot"/>
             {phaseLabel[phase]}
           </span>
           {isWaiting && isLeader ? (
             <span className="race-chip race-chip-leader">
-              <span className="race-chip-dot" />
+              <span className="race-chip-dot"/>
               Leader
             </span>
           ) : null}
@@ -142,8 +142,10 @@ export const RaceHeader = memo(function RaceHeader({
               {soundEnabled ? (
                 <>
                   <path d="M2 5.5h2.5L8 2.5v11L4.5 10.5H2a.5.5 0 0 1-.5-.5V6a.5.5 0 0 1 .5-.5Z" fill="currentColor"/>
-                  <path d="M10.5 4.5c1.2 1 1.8 2.2 1.8 3.5s-.6 2.5-1.8 3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-                  <path d="M12.2 2.8c1.8 1.5 2.8 3.4 2.8 5.2s-1 3.7-2.8 5.2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                  <path d="M10.5 4.5c1.2 1 1.8 2.2 1.8 3.5s-.6 2.5-1.8 3.5" stroke="currentColor" strokeWidth="1.3"
+                        strokeLinecap="round"/>
+                  <path d="M12.2 2.8c1.8 1.5 2.8 3.4 2.8 5.2s-1 3.7-2.8 5.2" stroke="currentColor" strokeWidth="1.3"
+                        strokeLinecap="round"/>
                 </>
               ) : (
                 <>
@@ -153,7 +155,7 @@ export const RaceHeader = memo(function RaceHeader({
               )}
             </svg>
             <span className="sound-toggle-track">
-              <span className="sound-toggle-knob" />
+              <span className="sound-toggle-knob"/>
             </span>
             <span className="sound-toggle-label">{soundEnabled ? 'On' : 'Off'}</span>
           </button>
@@ -204,7 +206,7 @@ export const RaceHeader = memo(function RaceHeader({
           </Button>
         ) : null}
         {isWaiting ? (
-           <Button onClick={onLeaveRoom}>Leave Room</Button>
+          <Button onClick={onLeaveRoom}>Leave Room</Button>
         ) : null}
         {phase === 'finished' ? (
           <Button variant="primary" onClick={isMobile ? () => setMobileWarningOpen(true) : onRaceAgain}>

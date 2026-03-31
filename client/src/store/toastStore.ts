@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import {create} from 'zustand'
 
 export type Toast = {
   id: string
@@ -19,15 +19,15 @@ export const useToastStore = create<ToastStore>((set) => ({
   toasts: [],
   addToast: (message, type = 'info', durationMs = 3000) => {
     const id = `toast-${++nextId}`
-    const toast: Toast = { id, message, type, durationMs }
-    set((state) => ({ toasts: [...state.toasts, toast] }))
+    const toast: Toast = {id, message, type, durationMs}
+    set((state) => ({toasts: [...state.toasts, toast]}))
     if (durationMs > 0) {
       window.setTimeout(() => {
-        set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) }))
+        set((state) => ({toasts: state.toasts.filter((t) => t.id !== id)}))
       }, durationMs)
     }
   },
   removeToast: (id) => {
-    set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) }))
+    set((state) => ({toasts: state.toasts.filter((t) => t.id !== id)}))
   },
 }))

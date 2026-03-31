@@ -1,6 +1,6 @@
-import { CodeIcon } from '@sanity/icons'
-import { GoLight, JavaScript, PhpLight } from '@ridemountainpig/svgl-react'
-import { Link } from 'react-router-dom'
+import {CodeIcon} from '@sanity/icons'
+import {GoLight, JavaScript, PhpLight} from '@ridemountainpig/svgl-react'
+import {Link} from 'react-router-dom'
 
 type HubItem = {
   id: string
@@ -20,11 +20,11 @@ type HubItem = {
 }
 
 export function HubCard({
-  hub,
-  featured = false,
-  featuredTone = 'default',
-  maxActivePlayers = 0,
-}: {
+                          hub,
+                          featured = false,
+                          featuredTone = 'default',
+                          maxActivePlayers = 0,
+                        }: {
   hub: HubItem
   featured?: boolean
   featuredTone?: 'default' | 'cta' | 'white'
@@ -40,16 +40,16 @@ export function HubCard({
 
   const logo = (() => {
     if (languageKey === 'go') {
-      return <GoLight aria-label="Go logo" />
+      return <GoLight aria-label="Go logo"/>
     }
     if (languageKey === 'php') {
-      return <PhpLight aria-label="PHP logo" />
+      return <PhpLight aria-label="PHP logo"/>
     }
     if (languageKey === 'javascript' || languageKey === 'js') {
-      return <JavaScript aria-label="JavaScript logo" />
+      return <JavaScript aria-label="JavaScript logo"/>
     }
 
-    return <CodeIcon aria-label="Language icon" />
+    return <CodeIcon aria-label="Language icon"/>
   })()
 
   const intensity = maxActivePlayers > 0 ? Math.max(8, Math.round((hub.activePlayers / maxActivePlayers) * 100)) : 8
@@ -62,7 +62,7 @@ export function HubCard({
       className={`hub-card ${featured ? `hub-card-featured ${featuredToneClass}` : ''}`.trim()}
     >
       <div className="hub-card-activity" aria-hidden="true">
-        <span style={{ width: `${intensity}%` }} />
+        <span style={{width: `${intensity}%`}}/>
       </div>
 
       <div className="hub-card-top">

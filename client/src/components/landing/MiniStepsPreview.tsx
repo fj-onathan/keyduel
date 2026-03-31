@@ -1,9 +1,9 @@
-import type { StepsPreviewData } from './types'
+import type {StepsPreviewData} from './types'
 
 const STEPS = ['Queue', 'Match', 'Countdown', 'Race']
 
-export function MiniStepsPreview({ data }: { data: StepsPreviewData }) {
-  const { activeIndex } = data
+export function MiniStepsPreview({data}: { data: StepsPreviewData }) {
+  const {activeIndex} = data
   const isResetting = activeIndex === -1
   const allComplete = activeIndex === 4
 

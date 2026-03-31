@@ -1,9 +1,9 @@
-import { Modal } from './Modal'
+import {Modal} from './Modal'
 
 export function MobileWarningModal({
-  open,
-  onClose,
-}: {
+                                     open,
+                                     onClose,
+                                   }: {
   open: boolean
   onClose: () => void
 }) {
@@ -12,11 +12,11 @@ export function MobileWarningModal({
       <div className="mobile-warning-content">
         <div className="mobile-warning-icon" aria-hidden="true">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-            <rect x="4" y="8" width="40" height="26" rx="3" stroke="currentColor" strokeWidth="2.5" />
-            <rect x="8" y="12" width="32" height="18" rx="1" fill="currentColor" opacity="0.1" />
-            <path d="M16 38h16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-            <path d="M20 34v4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-            <path d="M28 34v4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+            <rect x="4" y="8" width="40" height="26" rx="3" stroke="currentColor" strokeWidth="2.5"/>
+            <rect x="8" y="12" width="32" height="18" rx="1" fill="currentColor" opacity="0.1"/>
+            <path d="M16 38h16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M20 34v4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M28 34v4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
         </div>
 

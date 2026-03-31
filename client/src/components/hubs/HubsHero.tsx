@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import {useEffect, useRef} from 'react'
 
 type HubsHeroProps = {
   query: string
@@ -12,15 +12,15 @@ type HubsHeroProps = {
 }
 
 export function HubsHero({
-  query,
-  onQueryChange,
-  onClearQuery,
-  totalHubs,
-  rankedHubs,
-  totalOnline,
-  totalRacesToday,
-  topLanguage,
-}: HubsHeroProps) {
+                           query,
+                           onQueryChange,
+                           onClearQuery,
+                           totalHubs,
+                           rankedHubs,
+                           totalOnline,
+                           totalRacesToday,
+                           topLanguage,
+                         }: HubsHeroProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -48,7 +48,8 @@ export function HubsHero({
     <div className="hubs-hero-shell">
       <p className="hubs-kicker">Find your next duel</p>
       <h1 className="hubs-title">Search language hubs</h1>
-      <p className="hubs-subtitle">Find the right queue in seconds. Filter by language and jump straight into live races.</p>
+      <p className="hubs-subtitle">Find the right queue in seconds. Filter by language and jump straight into live
+        races.</p>
 
       <div className="hubs-search-wrap">
         <input

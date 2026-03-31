@@ -1,9 +1,9 @@
-import type { FilesPreviewData } from './types'
+import type {FilesPreviewData} from './types'
 
 const FILE_NAMES = ['race-2026-03-13.log', 'room-22.snapshot', 'leaderboard.cache']
 
-export function MiniFilesPreview({ data }: { data: FilesPreviewData }) {
-  const { files, isFading } = data
+export function MiniFilesPreview({data}: { data: FilesPreviewData }) {
+  const {files, isFading} = data
 
   return (
     <div className={isFading ? 'mini-files-wrap is-fading' : 'mini-files-wrap'}>
@@ -17,7 +17,7 @@ export function MiniFilesPreview({ data }: { data: FilesPreviewData }) {
           <div key={FILE_NAMES[i]} className="mini-file-anim">
             <span className="mini-file-name">
               {displayed}
-              {isTyping && <span className="mini-file-cursor" aria-hidden="true" />}
+              {isTyping && <span className="mini-file-cursor" aria-hidden="true"/>}
             </span>
             {file.isSaved && (
               <span className="mini-file-badge">✓ saved</span>

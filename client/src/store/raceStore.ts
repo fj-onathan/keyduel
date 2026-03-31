@@ -1,6 +1,6 @@
-import { create } from 'zustand'
-import { env } from '../config/env'
-import type { RaceResult, ServerEvent } from '../types/race'
+import {create} from 'zustand'
+import {env} from '../config/env'
+import type {RaceResult, ServerEvent} from '../types/race'
 
 type SocketState = 'idle' | 'connecting' | 'connected' | 'disconnected'
 
@@ -188,7 +188,7 @@ function clearHeartbeat() {
 
 function flushInput() {
   if (pendingInput) {
-    sendEvent({ type: 'race_input', ...pendingInput })
+    sendEvent({type: 'race_input', ...pendingInput})
     pendingInput = null
   }
   if (inputThrottleTimer !== null) {
@@ -199,7 +199,7 @@ function flushInput() {
 
 /** Enqueue a race_input event, sending at most once per INPUT_THROTTLE_MS. */
 function throttledInput(progress: number, errors: number) {
-  pendingInput = { progress, errors }
+  pendingInput = {progress, errors}
   if (inputThrottleTimer !== null) return // timer already running — will flush
   // Send immediately (leading edge) then start the cooldown
   flushInput()
@@ -219,7 +219,7 @@ function startHeartbeat(getState: () => RaceStore) {
   clearHeartbeat()
   heartbeatTimer = setInterval(() => {
     const token = getState().reconnectToken
-    sendEvent({ type: 'heartbeat', reconnectToken: token || undefined })
+    sendEvent({type: 'heartbeat', reconnectToken: token || undefined})
   }, HEARTBEAT_INTERVAL_MS)
 }
 
@@ -270,7 +270,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
 
     intentionalClose = false
     clearReconnectTimer()
-    set({ socketState: 'connecting', statusMessage: 'Connecting to race engine...' })
+    set({socketState: 'connecting', statusMessage: 'Connecting to race engine...'})
 
     const ws = new WebSocket(`${env.wsBaseUrl}?guestId=${encodeURIComponent(stableGuestId)}`)
     socket = ws
@@ -281,7 +281,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         ws.close()
         return
       }
-      set({ socketState: 'connected', statusMessage: 'Connected. Waiting...' })
+      set({socketState: 'connected', statusMessage: 'Connected. Waiting...'})
       reconnectAttempt = 0
       startHeartbeat(get)
 
@@ -309,11 +309,11 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
 
       if (data.type === 'session_assigned') {
         const token = data.sessionToken ?? ''
-        set({ reconnectToken: token })
+        set({reconnectToken: token})
         // Persist to sessionStorage so we survive page reloads
         const state = get()
         if (token && state.raceId) {
-          persistSession({ reconnectToken: token, raceId: state.raceId, roomId: state.roomId, hub: state.hub })
+          persistSession({reconnectToken: token, raceId: state.raceId, roomId: state.roomId, hub: state.hub})
         }
         return
       }
@@ -322,12 +322,12 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         const queueLabel = data.queueKey ?? 'queue'
         const position = data.position ?? 0
         const queueHub = queueLabel.split('|')[0] || get().hub
-        set({ hub: queueHub, statusMessage: `Queued in ${queueLabel} at position ${position}` })
+        set({hub: queueHub, statusMessage: `Queued in ${queueLabel} at position ${position}`})
         return
       }
 
       if (data.type === 'queue_left') {
-        set({ statusMessage: 'Left queue' })
+        set({statusMessage: 'Left queue'})
         return
       }
 
@@ -366,7 +366,12 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         // Persist session for page reload recovery
         const state = get()
         if (state.reconnectToken && state.raceId) {
-          persistSession({ reconnectToken: state.reconnectToken, raceId: state.raceId, roomId: state.roomId, hub: state.hub })
+          persistSession({
+            reconnectToken: state.reconnectToken,
+            raceId: state.raceId,
+            roomId: state.roomId,
+            hub: state.hub
+          })
         }
         return
       }
@@ -399,7 +404,12 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         // Persist session for page reload recovery
         const state = get()
         if (state.reconnectToken && state.raceId) {
-          persistSession({ reconnectToken: state.reconnectToken, raceId: state.raceId, roomId: state.roomId, hub: state.hub })
+          persistSession({
+            reconnectToken: state.reconnectToken,
+            raceId: state.raceId,
+            roomId: state.roomId,
+            hub: state.hub
+          })
         }
         return
       }
@@ -434,13 +444,18 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         // Persist session for page reload recovery
         const state = get()
         if (state.reconnectToken && state.raceId) {
-          persistSession({ reconnectToken: state.reconnectToken, raceId: state.raceId, roomId: state.roomId, hub: state.hub })
+          persistSession({
+            reconnectToken: state.reconnectToken,
+            raceId: state.raceId,
+            roomId: state.roomId,
+            hub: state.hub
+          })
         }
         return
       }
 
       if (data.type === 'race_state_update') {
-        set({ participants: data.participants ?? [] })
+        set({participants: data.participants ?? []})
         return
       }
 
@@ -510,17 +525,22 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
       }
 
       if (data.type === 'leader_changed') {
-        set({ leaderId: data.leaderId ?? '' })
+        set({leaderId: data.leaderId ?? ''})
         return
       }
 
       if (data.type === 'heartbeat_ack') {
         // Session keep-alive acknowledged — update token if server sent one
         if (data.sessionToken) {
-          set({ reconnectToken: data.sessionToken })
+          set({reconnectToken: data.sessionToken})
           const state = get()
           if (state.raceId) {
-            persistSession({ reconnectToken: data.sessionToken, raceId: state.raceId, roomId: state.roomId, hub: state.hub })
+            persistSession({
+              reconnectToken: data.sessionToken,
+              raceId: state.raceId,
+              roomId: state.roomId,
+              hub: state.hub
+            })
           }
         }
         return
@@ -528,7 +548,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
 
       if (data.type === 'error') {
         const msg = data.message ?? 'server error'
-        set({ statusMessage: msg })
+        set({statusMessage: msg})
 
         // Terminal race errors — the user cannot join this race.
         // Stop any auto-reconnect cycle and clear the saved session
@@ -570,12 +590,12 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
       socket = null
 
       if (intentionalClose) {
-        set({ socketState: 'disconnected', statusMessage: 'Disconnected' })
+        set({socketState: 'disconnected', statusMessage: 'Disconnected'})
         return
       }
 
       // Unexpected close — attempt auto-reconnect
-      set({ socketState: 'disconnected', statusMessage: 'Connection lost. Reconnecting...' })
+      set({socketState: 'disconnected', statusMessage: 'Connection lost. Reconnecting...'})
       scheduleReconnect()
     }
 
@@ -621,11 +641,11 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
   },
 
   leaveRoom: () => {
-    sendEvent({ type: 'leave_room' })
+    sendEvent({type: 'leave_room'})
   },
 
   queueRace: (hub: string, mode: string, capacity: number) => {
-    set({ hub })
+    set({hub})
     const doQueue = () => {
       sendEvent({
         type: 'queue_race',
@@ -645,7 +665,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
   },
 
   joinRace: (raceId: string) => {
-    set({ raceId })
+    set({raceId})
     const doJoin = () => {
       // Use in-memory token if available, otherwise try sessionStorage (page reload case)
       let token = get().reconnectToken
@@ -654,7 +674,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
         if (saved) {
           token = saved.reconnectToken
           // Restore hub from saved session too
-          set({ reconnectToken: token, hub: saved.hub })
+          set({reconnectToken: token, hub: saved.hub})
         }
       }
       sendEvent({
@@ -673,7 +693,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
   },
 
   startRace: () => {
-    sendEvent({ type: 'start_race' })
+    sendEvent({type: 'start_race'})
   },
 
   confirmStart: (addBots: boolean) => {
@@ -699,7 +719,7 @@ export const useRaceStore = create<RaceStore>((set, get) => ({
       }
     }
 
-    set({ typed: sliced })
+    set({typed: sliced})
 
     throttledInput(sliced.length, errors)
   },
@@ -711,7 +731,7 @@ function scheduleReconnect() {
   clearReconnectTimer()
 
   if (reconnectAttempt >= RECONNECT_MAX_ATTEMPTS) {
-    useRaceStore.setState({ statusMessage: 'Unable to reconnect. Please refresh the page.' })
+    useRaceStore.setState({statusMessage: 'Unable to reconnect. Please refresh the page.'})
     return
   }
 
@@ -719,7 +739,7 @@ function scheduleReconnect() {
   reconnectAttempt += 1
 
   reconnectTimer = setTimeout(() => {
-    const { socketState, reconnectToken, raceId, roomId } = useRaceStore.getState()
+    const {socketState, reconnectToken, raceId, roomId} = useRaceStore.getState()
 
     // Only reconnect if we're still disconnected
     if (socketState !== 'disconnected') {

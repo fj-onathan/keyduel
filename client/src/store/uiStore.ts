@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import {create} from 'zustand'
 
 type UIState = {
   reducedEffects: boolean
@@ -24,8 +24,8 @@ export const useUIStore = create<UIState>((set) => ({
     set((state) => {
       const next = !state.soundEnabled
       localStorage.setItem('keyduel_sound', next ? '1' : '0')
-      return { soundEnabled: next }
+      return {soundEnabled: next}
     }),
-  openAuthModal: () => set({ isAuthModalOpen: true }),
-  closeAuthModal: () => set({ isAuthModalOpen: false }),
+  openAuthModal: () => set({isAuthModalOpen: true}),
+  closeAuthModal: () => set({isAuthModalOpen: false}),
 }))

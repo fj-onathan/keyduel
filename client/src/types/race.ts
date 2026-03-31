@@ -1,42 +1,41 @@
 export type ClientEvent =
   | {
-      type: 'join_room'
-      roomId?: string
-    }
+  type: 'join_room'
+  roomId?: string
+}
   | {
-      type: 'join_race'
-      raceId: string
-      reconnectToken?: string
-    }
+  type: 'join_race'
+  raceId: string
+  reconnectToken?: string
+}
   | {
-      type: 'queue_race'
-      hub: string
-      mode: string
-      capacity: number
-      reconnectToken?: string
-    }
+  type: 'queue_race'
+  hub: string
+  mode: string
+  capacity: number
+  reconnectToken?: string
+}
   | {
-      type: 'leave_queue'
-    }
+  type: 'leave_queue'
+}
   | {
-      type: 'leave_room'
-    }
+  type: 'leave_room'
+}
   | {
-      type: 'start_race'
-    }
+  type: 'start_race'
+}
   | {
+  type: 'race_input'
+  progress: number
+  errors: number
+} | {
       type: 'confirm_start'
       addBots: boolean
     }
   | {
-      type: 'race_input'
-      progress: number
-      errors: number
-    }
-  | {
-      type: 'heartbeat'
-      reconnectToken?: string
-    }
+  type: 'heartbeat'
+  reconnectToken?: string
+}
 
 export type ParticipantSnapshot = {
   clientId: string

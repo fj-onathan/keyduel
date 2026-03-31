@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 
 const REPO_OWNER = "fj-onathan";
 const REPO_NAME = "keyduel";
@@ -25,7 +25,7 @@ async function fetchAndCache(): Promise<number | null> {
     if (!res.ok) return null;
     const data = await res.json();
     const count: number = data.stargazers_count;
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ count, ts: Date.now() }));
+    localStorage.setItem(CACHE_KEY, JSON.stringify({count, ts: Date.now()}));
     return count;
   } catch {
     return null;

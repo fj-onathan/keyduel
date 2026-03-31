@@ -1,10 +1,10 @@
-import type { ProfileOverviewResponse } from './types'
+import type {ProfileOverviewResponse} from './types'
 
 type Props = {
   curriculum: ProfileOverviewResponse['curriculum']
 }
 
-export function ProfileCurriculum({ curriculum }: Props) {
+export function ProfileCurriculum({curriculum}: Props) {
   const skills = curriculum.skills ?? []
   const items = curriculum.items ?? []
 

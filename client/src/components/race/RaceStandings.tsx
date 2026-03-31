@@ -1,5 +1,5 @@
-import { memo, useMemo } from 'react'
-import type { ParticipantSnapshot } from '../../types/race'
+import {memo, useMemo} from 'react'
+import type {ParticipantSnapshot} from '../../types/race'
 
 function hashCode(str: string): number {
   let hash = 0
@@ -24,11 +24,11 @@ function participantLabel(participant: ParticipantSnapshot): string {
 }
 
 export const RaceStandings = memo(function RaceStandings({
-  participants,
-  clientId,
-  snippetLength,
-  phase,
-}: {
+                                                           participants,
+                                                           clientId,
+                                                           snippetLength,
+                                                           phase,
+                                                         }: {
   participants: ParticipantSnapshot[]
   clientId: string
   snippetLength: number
@@ -95,7 +95,7 @@ export const RaceStandings = memo(function RaceStandings({
               <li
                 key={participant.clientId}
                 className={`race-lane ${isSelf ? 'is-self' : ''} ${isWinner ? 'is-winner' : ''} ${participant.finished ? 'is-finished' : ''}`.trim()}
-                style={{ '--lane-index': index } as React.CSSProperties}
+                style={{'--lane-index': index} as React.CSSProperties}
               >
                 <div className="race-lane-meta">
                   <span className="race-lane-identity">
@@ -110,7 +110,7 @@ export const RaceStandings = memo(function RaceStandings({
                     ) : (
                       <span
                         className="race-lane-avatar"
-                        style={{ backgroundColor: `hsl(${hue}, 72%, 42%)` }}
+                        style={{backgroundColor: `hsl(${hue}, 72%, 42%)`}}
                       >
                         {avatarInitial(participant)}
                       </span>

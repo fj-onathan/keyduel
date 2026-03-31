@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { ButtonLink } from '../ui/ButtonLink'
+import {useEffect, useMemo, useState} from 'react'
+import {ButtonLink} from '../ui/ButtonLink'
 
 const activityFeed = [
   {
@@ -38,7 +38,7 @@ type EngagementSectionProps = {
   playersOnline: number
 }
 
-export function EngagementSection({ reducedEffects, races24h, playersOnline }: EngagementSectionProps) {
+export function EngagementSection({reducedEffects, races24h, playersOnline}: EngagementSectionProps) {
   const [feedIndex, setFeedIndex] = useState(0)
   const [dailyCountdown, setDailyCountdown] = useState(4 * 3600 + 12 * 60 + 33)
 
@@ -97,7 +97,7 @@ export function EngagementSection({ reducedEffects, races24h, playersOnline }: E
           <p className="engagement-feed-detail">{feedItem.detail}</p>
           <div className="engagement-feed-dots" aria-hidden="true">
             {activityFeed.map((item) => (
-              <span key={item.title} className={item.title === feedItem.title ? 'is-active' : ''} />
+              <span key={item.title} className={item.title === feedItem.title ? 'is-active' : ''}/>
             ))}
           </div>
         </article>
@@ -129,7 +129,7 @@ export function EngagementSection({ reducedEffects, races24h, playersOnline }: E
             <em>return trigger</em>
           </div>
           <div className="engagement-cta-progress" aria-hidden="true">
-            <span style={{ width: `${Math.max(6, (dailyCountdown / (4 * 3600 + 12 * 60 + 33)) * 100)}%` }} />
+            <span style={{width: `${Math.max(6, (dailyCountdown / (4 * 3600 + 12 * 60 + 33)) * 100)}%`}}/>
           </div>
           <p className="engagement-big-number engagement-countdown">{formatCountdown(dailyCountdown)}</p>
           <p className="engagement-muted">bonus window until reset</p>

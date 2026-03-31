@@ -1,9 +1,9 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { fetchRandomSnippet, getRandomSnippet, type PracticeSnippet } from '../../lib/practiceSnippets'
-import { playFinishSound } from '../../lib/sounds'
-import { useUIStore } from '../../store/uiStore'
-import { Modal } from '../ui/Modal'
-import { RaceEditorPanel } from '../race/RaceEditorPanel'
+import {memo, useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {fetchRandomSnippet, getRandomSnippet, type PracticeSnippet} from '../../lib/practiceSnippets'
+import {playFinishSound} from '../../lib/sounds'
+import {useUIStore} from '../../store/uiStore'
+import {Modal} from '../ui/Modal'
+import {RaceEditorPanel} from '../race/RaceEditorPanel'
 
 function formatDuration(ms: number): string {
   if (ms <= 0) return '--'
@@ -14,9 +14,9 @@ function formatDuration(ms: number): string {
 }
 
 export const PracticeModal = memo(function PracticeModal({
-  open,
-  onClose,
-}: {
+                                                           open,
+                                                           onClose,
+                                                         }: {
   open: boolean
   onClose: () => void
 }) {
@@ -172,8 +172,8 @@ export const PracticeModal = memo(function PracticeModal({
             <span className="practice-snippet-lang">{snippet.language}</span>
             <span className="practice-snippet-diff" title="Difficulty level">
               {'|'.repeat(snippet.difficulty)}
-              {Array.from({ length: Math.max(0, 5 - snippet.difficulty) }, (_, i) => (
-                <span key={i} style={{ opacity: 0.25 }}>|</span>
+              {Array.from({length: Math.max(0, 5 - snippet.difficulty)}, (_, i) => (
+                <span key={i} style={{opacity: 0.25}}>|</span>
               ))}
               {' '}Lvl {snippet.difficulty}
             </span>
