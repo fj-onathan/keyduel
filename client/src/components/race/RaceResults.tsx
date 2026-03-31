@@ -37,7 +37,10 @@ export const RaceResults = memo(function RaceResults({ results, replayUrl }: { r
           {winner ? (
             <div className="race-winner-banner race-winner-glow" aria-live="polite">
               <span>Winner</span>
-              <strong>{winner.displayName || winner.clientId}</strong>
+              <strong>
+                {winner.displayName || winner.clientId}
+                {winner.isBot ? <span className="race-bot-badge">BOT</span> : null}
+              </strong>
               <p>
                 {winner.netWpm.toFixed(1)} WPM - {winner.accuracy.toFixed(1)}% accuracy
               </p>
@@ -71,7 +74,10 @@ export const RaceResults = memo(function RaceResults({ results, replayUrl }: { r
                 style={{ '--row-index': index } as React.CSSProperties}
               >
                 <span className="race-result-position">#{result.position}</span>
-                <strong>{result.displayName || result.clientId}</strong>
+                <strong>
+                  {result.displayName || result.clientId}
+                  {result.isBot ? <span className="race-bot-badge">BOT</span> : null}
+                </strong>
                 <span>{result.completionPercent.toFixed(1)}%</span>
                 <span>{result.netWpm.toFixed(1)} WPM</span>
                 <span>{result.accuracy.toFixed(1)}%</span>

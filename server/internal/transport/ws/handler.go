@@ -22,6 +22,7 @@ type ClientEvent struct {
 	RaceID         string `json:"raceId,omitempty"`
 	Progress       int    `json:"progress"`
 	Errors         int    `json:"errors"`
+	AddBots        bool   `json:"addBots,omitempty"`
 }
 
 type ServerEvent struct {
@@ -56,6 +57,7 @@ type ParticipantSnapshot struct {
 	NetWPM      float64 `json:"netWpm"`
 	Accuracy    float64 `json:"accuracy"`
 	Finished    bool    `json:"finished"`
+	IsBot       bool    `json:"isBot,omitempty"`
 }
 
 type RaceResult struct {
@@ -73,6 +75,7 @@ type RaceResult struct {
 	Finished          bool    `json:"finished"`
 	FinishedElapsedMS int64   `json:"finishedElapsedMs"`
 	Suspicious        bool    `json:"suspicious"`
+	IsBot             bool    `json:"isBot,omitempty"`
 }
 
 var upgrader = websocket.Upgrader{
@@ -193,6 +196,8 @@ func NewHandler(hub *Hub, sessions *session.Store, db *pgxpool.Pool) http.Handle
 				hub.HandleLeaveRoom(clientID)
 			case "start_race":
 				hub.HandleStartRace(clientID)
+			case "confirm_start":
+				hub.HandleConfirmStart(clientID, event.AddBots)
 			case "race_input":
 				hub.HandleRaceInput(clientID, event.Progress, event.Errors)
 			case "heartbeat":

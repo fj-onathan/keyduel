@@ -116,6 +116,7 @@ export const RaceStandings = memo(function RaceStandings({
                       </span>
                     )}
                     #{index + 1} {label}
+                    {participant.isBot ? <span className="race-bot-badge">BOT</span> : null}
                     {isSelf ? <em>You</em> : null}
                     {isWinner ? <b>Winner</b> : null}
                   </span>

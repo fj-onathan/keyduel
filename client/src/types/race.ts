@@ -25,6 +25,10 @@ export type ClientEvent =
       type: 'start_race'
     }
   | {
+      type: 'confirm_start'
+      addBots: boolean
+    }
+  | {
       type: 'race_input'
       progress: number
       errors: number
@@ -44,6 +48,7 @@ export type ParticipantSnapshot = {
   netWpm: number
   accuracy: number
   finished: boolean
+  isBot?: boolean
 }
 
 export type RaceResult = {
@@ -60,6 +65,7 @@ export type RaceResult = {
   finished: boolean
   finishedElapsedMs: number
   suspicious: boolean
+  isBot?: boolean
 }
 
 export type ServerEvent = {
@@ -78,6 +84,8 @@ export type ServerEvent = {
   snippet?: string
   snippetLen?: number
   durationMs?: number
+  raceDurationMs?: number
+  elapsedMs?: number
   participants?: ParticipantSnapshot[]
   results?: RaceResult[]
   leaderId?: string

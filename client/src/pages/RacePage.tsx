@@ -4,6 +4,8 @@ import { RaceEditorPanel } from '../components/race/RaceEditorPanel'
 import { RaceHeader } from '../components/race/RaceHeader'
 import { RaceResults } from '../components/race/RaceResults'
 import { RaceStandings } from '../components/race/RaceStandings'
+import { Modal } from '../components/ui/Modal'
+import { Button } from '../components/ui/Button'
 import { playFinishSound } from '../lib/sounds'
 import { useRaceStore, getSavedSession } from '../store/raceStore'
 import { useToastStore } from '../store/toastStore'
@@ -50,6 +52,9 @@ export function RacePage() {
   const leaderId = useRaceStore((state) => state.leaderId)
   const snippetLen = useRaceStore((state) => state.snippetLen)
   const storeRaceId = useRaceStore((state) => state.raceId)
+  const pendingSoloConfirm = useRaceStore((state) => state.pendingSoloConfirm)
+  const confirmStart = useRaceStore((state) => state.confirmStart)
+  const cancelSoloConfirm = useRaceStore((state) => state.cancelSoloConfirm)
 
   const [mockTyped, setMockTyped] = useState('')
   const [mockCountdown, setMockCountdown] = useState(3)
@@ -526,6 +531,20 @@ export function RacePage() {
       </div>
 
       <RaceResults results={resultsValue} replayUrl={!isMock && raceIdParam ? `/race/${hubParam ?? 'go'}/${raceIdParam}/replay` : undefined} />
+
+      <Modal open={pendingSoloConfirm} onClose={cancelSoloConfirm} title="Start Solo Race?">
+        <div className="solo-confirm-body">
+          <p className="solo-confirm-message">
+            You are the only participant. Bot opponents will be added to race with you.
+          </p>
+          <div className="solo-confirm-actions">
+            <Button variant="primary" onClick={() => confirmStart(true)}>
+              Start with Bots
+            </Button>
+            <Button onClick={cancelSoloConfirm}>Cancel</Button>
+          </div>
+        </div>
+      </Modal>
     </main>
   )
 }
