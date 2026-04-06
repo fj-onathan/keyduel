@@ -1,6 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
 import {FeatureCard} from "../components/landing/FeatureCard";
-import {EngagementSection} from "../components/landing/EngagementSection";
 import {HeroRaceWindow} from "../components/landing/HeroRaceWindow";
 import {MiniRacePreview} from "../components/landing/MiniRacePreview";
 import {MiniStepsPreview} from "../components/landing/MiniStepsPreview";
@@ -607,11 +606,11 @@ export function LandingPage() {
         />
       </section>
 
-      <EngagementSection
-        reducedEffects={reducedEffects}
-        races24h={platformStats.races24h}
-        playersOnline={platformStats.onlinePlayers}
-      />
+      {/*<EngagementSection*/}
+      {/*  reducedEffects={reducedEffects}*/}
+      {/*  races24h={platformStats.races24h}*/}
+      {/*  playersOnline={platformStats.onlinePlayers}*/}
+      {/*/>*/}
 
       <ProfileLeaderboardSection/>
 
